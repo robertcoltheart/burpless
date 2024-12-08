@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32421.90
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Burpless", "src\Burpless\Burpless.csproj", "{539E86BF-C2EF-42DD-A360-4105934753A0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Burpless.Tests", "src\Burpless.Tests\Burpless.Tests.csproj", "{4C8D3639-4B7D-4804-B04E-E86E11F09364}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{539E86BF-C2EF-42DD-A360-4105934753A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{539E86BF-C2EF-42DD-A360-4105934753A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{539E86BF-C2EF-42DD-A360-4105934753A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{539E86BF-C2EF-42DD-A360-4105934753A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C8D3639-4B7D-4804-B04E-E86E11F09364}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C8D3639-4B7D-4804-B04E-E86E11F09364}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C8D3639-4B7D-4804-B04E-E86E11F09364}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C8D3639-4B7D-4804-B04E-E86E11F09364}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0E028F10-E238-4E5F-AD62-3C66A06CE174}
+	EndGlobalSection
+EndGlobal
