@@ -1,7 +1,7 @@
 ﻿namespace Burpless;
 
-public interface IFeatureBuilder<TContext> : INameBuilder<TContext>
+public interface IFeatureBuilder<TContext> : IDescriptionBuilder<TContext>
     where TContext : class
 {
-    INameBuilder<TContext> Feature(Feature feature);
+    IDescriptionBuilder<TContext> Background(IFeatureBackgroundBuilder<TContext> background);
 }

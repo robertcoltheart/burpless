@@ -4,28 +4,36 @@ public class Feature : IEquatable<Feature>
 {
     public string Name { get; private set; }
 
-    public string Description { get; private set; }
+    public string? Description { get; private set; }
 
     public IReadOnlyCollection<string> Tags { get; private set; }
 
-    public static Feature Empty()
+    public static Feature Named(string name)
     {
         return new Feature
         {
-            Name = string.Empty,
-            Description = string.Empty,
-            Tags = []
+            Name = name
         };
     }
 
-    public static Feature New(string name, string? description = null, params IEnumerable<string> tags)
+    public static IFeatureBackgroundBuilder<TContext> Background<TContext>()
+        where TContext : class
     {
-        return new Feature
-        {
-            Name = name,
-            Description = description,
-            Tags = [..tags]
-        };
+        return null;
+    }
+
+    public Feature WithDescription(string description)
+    {
+        Description = description;
+
+        return this;
+    }
+
+    public Feature WithTags(params IEnumerable<string> tags)
+    {
+        Tags = [..tags];
+
+        return this;
     }
 
     public bool Equals(Feature? other)

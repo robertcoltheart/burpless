@@ -2,7 +2,7 @@
 
 namespace Burpless;
 
-public interface IScenarioBuilder<TContext>
+public interface IScenarioBuilder<TContext> : IScenarioExecutor<TContext>
     where TContext : class
 {
     IScenarioBuilder<TContext> Given(Expression<Action<TContext>> action);
