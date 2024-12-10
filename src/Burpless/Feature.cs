@@ -16,12 +16,6 @@ public class Feature : IEquatable<Feature>
         };
     }
 
-    public static IFeatureBackgroundBuilder<TContext> Background<TContext>()
-        where TContext : class
-    {
-        return null;
-    }
-
     public Feature WithDescription(string description)
     {
         Description = description;
@@ -29,10 +23,16 @@ public class Feature : IEquatable<Feature>
         return this;
     }
 
-    public Feature WithTags(params IEnumerable<string> tags)
+    public Feature WithTags(params string[] tags)
     {
         Tags = [..tags];
 
+        return this;
+    }
+
+    public Feature WithBackground<TContext>(Action<IBackgroundBuilder<TContext>> action)
+        where TContext : class
+    {
         return this;
     }
 

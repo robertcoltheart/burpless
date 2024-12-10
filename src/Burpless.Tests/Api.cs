@@ -3,13 +3,12 @@
 [Collection(nameof(ApiCollection))]
 public class Api(WebApi web)
 {
-    private static readonly Feature Feature = Feature
+    private readonly Feature feature = Feature
         .Named("Cash machine")
         .WithDescription("Cash machine should give out money")
-        .WithTags("atm", "cash");
-
-    private static readonly object Background = Feature.Background<Context>()
-        .Given(c => c.TheAccountIsInCredit());
+        .WithTags("atm", "cash")
+        .WithBackground<Context>(background => background
+            .Given(x => x.TheAccountIsInCredit()));
 
     /// <summary>
     /// Feature: Cash machine
@@ -21,7 +20,7 @@ public class Api(WebApi web)
     /// </summary>
     [Fact]
     public void AccountIsInCredit() => Scenario.For<Context>()
-        .Feature(Feature)
+        .Feature(feature)
         .Given(c => c.TheAccountIsInCredit())
         .Then(c => c.EnsureTheAccountIsDebited())
         .Execute();
@@ -36,7 +35,7 @@ public class Api(WebApi web)
     /// </summary>
     [Fact]
     public Task AccountIsValid() => Scenario.For<Context>()
-        .Feature(Feature)
+        .Feature(feature)
         .Given(c => c.TheAccountIsInCredit())
         .Then(c => c.EnsureTheAccountIsDebited())
         .ExecuteAsync();

@@ -2,18 +2,22 @@
 
 public class Table
 {
+    public List<string> Columns { get; } = [];
+
+    public List<object?[]> Rows { get; } = [];
+
     public static implicit operator Table(string value)
     {
         return null;
     }
 
-    public T Get<T>()
+    public static Table FromColumns(params string[] columns)
     {
-        return default;
+        return new Table();
     }
 
-    public IEnumerable<T> GetAll<T>()
+    public static Table From<T>(params T[] values)
     {
-        return null;
+        return new Table();
     }
 }

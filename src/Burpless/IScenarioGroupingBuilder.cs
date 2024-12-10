@@ -3,5 +3,5 @@
 public interface IScenarioGroupingBuilder<TContext> : IDescriptionBuilder<TContext>
     where TContext : class
 {
-    IFeatureBuilder<TContext> Feature(Feature feature);
+    IDescriptionBuilder<TContext> Feature(Feature feature);
 }
