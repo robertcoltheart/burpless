@@ -1,4 +1,6 @@
-﻿namespace Burpless;
+﻿using Burpless.Builders;
+
+namespace Burpless;
 
 public static class Scenario
 {

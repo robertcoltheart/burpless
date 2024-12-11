@@ -1,4 +1,6 @@
-﻿namespace Burpless;
+﻿using Burpless.Builders;
+
+namespace Burpless;
 
 public class Feature : IEquatable<Feature>
 {
@@ -23,9 +25,16 @@ public class Feature : IEquatable<Feature>
         return this;
     }
 
-    public Feature WithTags(params string[] tags)
+    public Feature WithTags(params IEnumerable<string> tags)
     {
         Tags = [..tags];
+
+        return this;
+    }
+
+    public Feature WithTags(params string[] tags)
+    {
+        Tags = [.. tags];
 
         return this;
     }

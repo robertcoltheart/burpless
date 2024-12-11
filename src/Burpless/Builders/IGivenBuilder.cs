@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace Burpless;
+namespace Burpless.Builders;
 
 public interface IGivenBuilder<TContext> : IWhenBuilder<TContext>
     where TContext : class

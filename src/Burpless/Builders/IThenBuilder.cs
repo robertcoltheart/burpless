@@ -1,7 +1,6 @@
-using System;
 using System.Linq.Expressions;
 
-namespace Burpless;
+namespace Burpless.Builders;
 
 public interface IThenBuilder<TContext> : IScenarioExecutor<TContext>
     where TContext : class

@@ -10,44 +10,71 @@ public class Api(WebApi web)
         .WithBackground<Context>(background => background
             .Given(x => x.TheAccountIsInCredit()));
 
-    /// <summary>
-    /// Feature: Cash machine
-    /// 
-    ///   Scenario: Account is in credit
-    ///
-    ///   Given the account is in credit
-    ///   Then ensure the account is debited
-    /// </summary>
     [Fact]
     public void AccountIsInCredit() => Scenario.For<Context>()
         .Feature(feature)
-        .Given(c => c.TheAccountIsInCredit())
-        .Then(c => c.EnsureTheAccountIsDebited())
+        .Given(x => x.TheAccountIsInCredit())
+        .When(x => x.MoneyIsTakenOutOfTheATM())
+        .Then(x => x.EnsureTheAccountIsDebited())
         .Execute();
 
-    /// <summary>
-    /// Feature: Cash machine
-    /// 
-    ///   Scenario: Account is in credit
-    ///
-    ///   Given the account is in credit
-    ///   Then ensure the account is debited
-    /// </summary>
     [Fact]
-    public Task AccountIsValid() => Scenario.For<Context>()
+    public Task AccountIsValidUsingGherkinTable() => Scenario.For<Context>()
         .Feature(feature)
-        .Given(c => c.TheAccountIsInCredit())
-        .Then(c => c.EnsureTheAccountIsDebited())
+        .Given(x => x.TheAccountIsInCredit())
+        .When(x => x.MoneyIsTakenOutOfTheATM())
+        .Then(x => x.EnsureTheAccountIsDebited())
+        .And(x => x.TheFollowingDataIsReceived(
+            """
+            | Account Id | Balance |
+            | 12345      | 123.45  |
+            """))
+        .ExecuteAsync();
+
+    [Fact]
+    public Task AccountIsValidUsingObject() => Scenario.For<Context>()
+        .Feature(feature)
+        .Given(x => x.TheAccountIsInCredit())
+        .When(x => x.MoneyIsTakenOutOfTheATM())
+        .Then(x => x.EnsureTheAccountIsDebited())
+        .And(x => x.TheFollowingDataIsReceived(Table.From(new { AccountId = 12345, Balance = 123.45m })))
+        .ExecuteAsync();
+
+    [Fact]
+    public Task AccountIsValidUsingTable() => Scenario.For<Context>()
+        .Feature(feature)
+        .Given(x => x.TheAccountIsInCredit())
+        .When(x => x.MoneyIsTakenOutOfTheATM())
+        .Then(x => x.EnsureTheAccountIsDebited())
+        .And(x => x.TheFollowingDataIsReceived(Table
+            .WithColumns("AccountId", "Balance")
+            .AddRow(12345, 123.45m)))
         .ExecuteAsync();
 
     private class Context
     {
+        private object? data;
+
         public void TheAccountIsInCredit()
         {
         }
 
+        public Task MoneyIsTakenOutOfTheATM()
+        {
+            data = new object();
+
+            return Task.CompletedTask;
+        }
+
         public Task EnsureTheAccountIsDebited()
         {
+            return Task.CompletedTask;
+        }
+
+        public Task TheFollowingDataIsReceived(Table table)
+        {
+            TableAssert.Equivalent(table, data);
+
             return Task.CompletedTask;
         }
     }

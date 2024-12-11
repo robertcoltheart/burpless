@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace Burpless;
+namespace Burpless.Builders;
 
 public interface IBackgroundContinuationBuilder<TContext> : IBackgroundBuilder<TContext>
     where TContext : class

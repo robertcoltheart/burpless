@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace Burpless;
+namespace Burpless.Builders;
 
 public interface IThenContinuationBuilder<TContext> : IThenBuilder<TContext>
     where TContext : class
