@@ -15,7 +15,7 @@ public class Configuration
 
     public Configuration UseServiceProvider(IServiceProvider provider)
     {
-        Services = new WrappedServiceProvider(provider);
+        Services = new HybridServiceProvider(provider);
 
         return this;
     }
