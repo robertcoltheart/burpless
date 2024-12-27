@@ -53,9 +53,11 @@ public class ThenBuilder<TContext> : ScenarioExecutor<TContext>
         return new ThenContinuationBuilder<TContext>(Details);
     }
 
-    public ThenContinuationBuilder<TContext> ThenExceptionIsThrown()
+    public ThenContinuationBuilder<TContext> ThenExceptionIsThrown(Type? exceptionType = null)
     {
-        return ThenExceptionIsThrown<Exception>();
+        Details.ExpectedException = exceptionType ?? typeof(Exception);
+
+        return new ThenContinuationBuilder<TContext>(Details);
     }
 
     public ThenContinuationBuilder<TContext> ThenExceptionIsThrown<TException>()
