@@ -26,6 +26,6 @@ public class ScenarioExecutor<TContext>
 
     private Task ExecuteAsync()
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 }
