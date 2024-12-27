@@ -5,6 +5,10 @@ namespace Burpless.Builders;
 public class ThenBuilder<TContext> : ScenarioExecutor<TContext>
     where TContext : class
 {
+    internal ThenBuilder()
+    {
+    }
+
     public ThenContinuationBuilder<TContext> Then(Expression<Action<TContext>> action)
     {
         return Then(action.GetName(), action.Compile());
