@@ -13,7 +13,7 @@ public static class Scenario
     {
         var name = GetCallingName();
 
-        throw new NotImplementedException();
+        return new ScenarioGroupingBuilder<TContext>(name);
     }
 
     private static string GetCallingName()
