@@ -1,6 +1,4 @@
-﻿using Burpless.Builders;
-
-namespace Burpless.Tests;
+﻿namespace Burpless.Tests;
 
 [Collection(nameof(ApiCollection))]
 public class Api(WebApi web)

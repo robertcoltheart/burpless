@@ -1,7 +1,6 @@
 using System.Text;
 using Burpless.Services;
 using Microsoft.Extensions.DependencyInjection;
-using Assert = Xunit.Assert;
 
 namespace Burpless.Tests.Services;
 

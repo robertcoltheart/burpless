@@ -1,5 +1,4 @@
 ﻿using Burpless.Builders;
-using Burpless.Runner;
 
 namespace Burpless.Tests.Builders;
 
