@@ -10,7 +10,7 @@
 
   <PropertyGroup>
     <Authors>Robert Coltheart</Authors>
-    <Description>A thing that does something</Description>
+    <Description>A fluent behavior-driven testing framework</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/robertcoltheart/Burpless</PackageProjectUrl>
     <RepositoryUrl>https://github.com/robertcoltheart/Burpless</RepositoryUrl>
