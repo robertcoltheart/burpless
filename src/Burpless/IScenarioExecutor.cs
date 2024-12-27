@@ -1,4 +1,6 @@
-﻿namespace Burpless;
+﻿using System.Runtime.CompilerServices;
+
+namespace Burpless;
 
 public interface IScenarioExecutor<TContext>
     where TContext : class
@@ -6,4 +8,6 @@ public interface IScenarioExecutor<TContext>
     void Execute();
 
     Task ExecuteAsync();
+
+    TaskAwaiter GetAwaiter();
 }

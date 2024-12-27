@@ -1,4 +1,5 @@
 ﻿using Burpless.Services;
+using Assert = Xunit.Assert;
 
 namespace Burpless.Tests.Services;
 

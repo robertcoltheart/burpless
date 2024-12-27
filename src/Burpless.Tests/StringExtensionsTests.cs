@@ -1,4 +1,6 @@
-﻿namespace Burpless.Tests;
+﻿using Assert = Xunit.Assert;
+
+namespace Burpless.Tests;
 
 public class StringExtensionsTests
 {

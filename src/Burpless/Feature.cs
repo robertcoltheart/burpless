@@ -39,7 +39,7 @@ public class Feature : IEquatable<Feature>
         return this;
     }
 
-    public Feature WithBackground<TContext>(Action<IBackgroundBuilder<TContext>> action)
+    public Feature WithBackground<TContext>(Action<BackgroundBuilder<TContext>> action)
         where TContext : class
     {
         return this;
