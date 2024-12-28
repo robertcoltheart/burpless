@@ -1,13 +1,10 @@
 ﻿using System.Diagnostics;
 using Burpless.Builders;
-using Burpless.Runner;
 
 namespace Burpless;
 
 public static class Scenario
 {
-    private static readonly ScenarioRunnerFactory RunnerFactory = new();
-
     public static ScenarioGroupingBuilder<TContext> For<TContext>()
         where TContext : class
     {

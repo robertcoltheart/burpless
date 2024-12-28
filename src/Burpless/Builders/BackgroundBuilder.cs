@@ -32,6 +32,9 @@ public class BackgroundBuilder<TContext>
 
         Steps.Add(backgroundStep);
 
-        return new BackgroundContinuationBuilder<TContext>(Steps);
+        return new BackgroundContinuationBuilder<TContext>
+        {
+            Steps = Steps
+        };
     }
 }

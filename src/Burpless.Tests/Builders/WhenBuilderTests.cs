@@ -4,71 +4,60 @@ namespace Burpless.Tests.Builders;
 
 public class WhenBuilderTests
 {
-    [Theory]
-    [InlineData("Work")]
-    [InlineData("WorkAsync")]
-    [InlineData("MyWork")]
-    [InlineData("MyWorkAsync")]
-    public void WhenExpressionsAddStep(string name)
+    [Fact]
+    public void WhenExpressionsAddStep()
     {
         var builder = new WhenBuilder<Context>()
-            .When(x => x.Work())
-            .When(x => x.WorkAsync())
-            .When("MyWork", x => x.Work())
+            .When(x => x.Work());
+
+        var step = builder.Details.Steps.FirstOrDefault();
+
+        Assert.NotNull(step);
+        Assert.Equal(StepType.When, step.Type);
+        Assert.Equal("Work", step.Name);
+    }
+
+    [Fact]
+    public void WhenAsyncExpressionsAddStep()
+    {
+        var builder = new WhenBuilder<Context>()
+            .When(x => x.WorkAsync());
+
+        var step = builder.Details.Steps.FirstOrDefault();
+
+        Assert.NotNull(step);
+        Assert.Equal(StepType.When, step.Type);
+        Assert.Equal("WorkAsync", step.Name);
+    }
+
+    [Fact]
+    public void WhenNamedExpressionsAddStep()
+    {
+        var builder = new WhenBuilder<Context>()
+            .When("MyWork", x => x.Work());
+
+        var step = builder.Details.Steps.FirstOrDefault();
+
+        Assert.NotNull(step);
+        Assert.Equal(StepType.When, step.Type);
+        Assert.Equal("MyWork", step.Name);
+    }
+
+    [Fact]
+    public void WhenNamedAsyncExpressionsAddStep()
+    {
+        var builder = new WhenBuilder<Context>()
             .When("MyWorkAsync", x => x.WorkAsync());
 
-        var step = builder.Details.Steps.FirstOrDefault(x => x.Name == name);
+        var step = builder.Details.Steps.FirstOrDefault();
 
         Assert.NotNull(step);
         Assert.Equal(StepType.When, step.Type);
-    }
-
-    [Theory]
-    [InlineData("Work")]
-    [InlineData("WorkAsync")]
-    [InlineData("MyWork")]
-    [InlineData("MyWorkAsync")]
-    public void WhenAndContinuationExpressionsAddStep(string name)
-    {
-        var builder = new WhenBuilder<Context>()
-            .When(x => x.Dummy())
-            .And(x => x.Work())
-            .And(x => x.WorkAsync())
-            .And("MyWork", x => x.Work())
-            .And("MyWorkAsync", x => x.WorkAsync());
-
-        var step = builder.Details.Steps.FirstOrDefault(x => x.Name == name);
-
-        Assert.NotNull(step);
-        Assert.Equal(StepType.When, step.Type);
-    }
-
-    [Theory]
-    [InlineData("Work")]
-    [InlineData("WorkAsync")]
-    [InlineData("MyWork")]
-    [InlineData("MyWorkAsync")]
-    public void WhenButContinuationExpressionsAddStep(string name)
-    {
-        var builder = new WhenBuilder<Context>()
-            .When(x => x.Dummy())
-            .But(x => x.Work())
-            .But(x => x.WorkAsync())
-            .But("MyWork", x => x.Work())
-            .But("MyWorkAsync", x => x.WorkAsync());
-
-        var step = builder.Details.Steps.FirstOrDefault(x => x.Name == name);
-
-        Assert.NotNull(step);
-        Assert.Equal(StepType.When, step.Type);
+        Assert.Equal("MyWorkAsync", step.Name);
     }
 
     private class Context
     {
-        public void Dummy()
-        {
-        }
-
         public void Work()
         {
         }

@@ -5,9 +5,8 @@ namespace Burpless.Builders;
 public class GivenContinuationBuilder<TContext> : GivenBuilder<TContext>
     where TContext : class
 {
-    internal GivenContinuationBuilder(ScenarioDetails<TContext> details)
+    internal GivenContinuationBuilder()
     {
-        Details = details;
     }
 
     public GivenContinuationBuilder<TContext> And(Expression<Action<TContext>> action)

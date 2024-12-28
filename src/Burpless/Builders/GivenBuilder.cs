@@ -28,6 +28,9 @@ public class GivenBuilder<TContext> : WhenBuilder<TContext>
     {
         AddStep(step, StepType.Given, (context, _) => action(context));
 
-        return new GivenContinuationBuilder<TContext>(Details);
+        return new GivenContinuationBuilder<TContext>
+        {
+            Details = Details
+        };
     }
 }
