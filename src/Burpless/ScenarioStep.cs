@@ -1,6 +1,6 @@
 ﻿namespace Burpless;
 
-internal class ScenarioStep<T>(string name, StepType type, Func<T, StepResult, Task> action) : IScenarioStep
+internal class ScenarioStep<T>(string name, StepType type, Func<T, StepResult, Task> action)
 {
     public string Name { get; } = name;
 

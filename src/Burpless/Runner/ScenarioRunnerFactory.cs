@@ -2,7 +2,7 @@
 
 internal class ScenarioRunnerFactory : IScenarioRunnerFactory
 {
-    public IScenarioRunner Create<T>(ScenarioDetails<T> details, Feature? feature, IScenarioStep[] steps, Type? expectedException)
+    public IScenarioRunner Create<T>(ScenarioDetails<T> details, Feature? feature, ScenarioStep<T>[] steps, Type? expectedException)
     {
         return new ScenarioRunner<T>(details, feature, steps, expectedException);
     }

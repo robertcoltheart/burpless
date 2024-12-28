@@ -15,7 +15,7 @@ public class ScenarioGroupingBuilderTests
     [Fact]
     public void CanSetFeature()
     {
-        var feature = new Feature();
+        var feature = Feature.Named("feature");
         
         var builder = new ScenarioGroupingBuilder<object>("name")
             .Feature(feature);
