@@ -5,9 +5,8 @@ namespace Burpless.Builders;
 public class BackgroundContinuationBuilder<TContext> : BackgroundBuilder<TContext>
     where TContext : class
 {
-    internal BackgroundContinuationBuilder(List<ScenarioStep<TContext>> steps)
+    internal BackgroundContinuationBuilder()
     {
-        Steps = steps;
     }
 
     public BackgroundContinuationBuilder<TContext> And(Expression<Action<TContext>> action)

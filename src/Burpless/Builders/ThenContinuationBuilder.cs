@@ -5,9 +5,8 @@ namespace Burpless.Builders;
 public class ThenContinuationBuilder<TContext> : ThenBuilder<TContext>
     where TContext : class
 {
-    internal ThenContinuationBuilder(ScenarioDetails<TContext> details)
+    internal ThenContinuationBuilder()
     {
-        Details = details;
     }
 
     public ThenContinuationBuilder<TContext> And(Expression<Action<TContext>> action)

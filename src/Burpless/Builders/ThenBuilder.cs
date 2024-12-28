@@ -43,21 +43,30 @@ public class ThenBuilder<TContext> : ScenarioExecutor<TContext>
     {
         AddStep(step, StepType.Then, (context, _) => action(context));
 
-        return new ThenContinuationBuilder<TContext>(Details);
+        return new ThenContinuationBuilder<TContext>
+        {
+            Details = Details
+        };
     }
 
     public ThenContinuationBuilder<TContext> Then(string step, Func<TContext, StepResult, Task> action)
     {
         AddStep(step, StepType.Then, action);
 
-        return new ThenContinuationBuilder<TContext>(Details);
+        return new ThenContinuationBuilder<TContext>
+        {
+            Details = Details
+        };
     }
 
     public ThenContinuationBuilder<TContext> ThenExceptionIsThrown(Type? exceptionType = null)
     {
         Details.ExpectedException = exceptionType ?? typeof(Exception);
 
-        return new ThenContinuationBuilder<TContext>(Details);
+        return new ThenContinuationBuilder<TContext>
+        {
+            Details = Details
+        };
     }
 
     public ThenContinuationBuilder<TContext> ThenExceptionIsThrown<TException>()
@@ -65,6 +74,9 @@ public class ThenBuilder<TContext> : ScenarioExecutor<TContext>
     {
         Details.ExpectedException = typeof(TException);
 
-        return new ThenContinuationBuilder<TContext>(Details);
+        return new ThenContinuationBuilder<TContext>
+        {
+            Details = Details
+        };
     }
 }

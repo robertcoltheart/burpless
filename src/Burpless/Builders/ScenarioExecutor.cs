@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using Burpless.Runner;
 
 namespace Burpless.Builders;
 
@@ -26,6 +27,8 @@ public class ScenarioExecutor<TContext>
 
     private Task ExecuteAsync()
     {
-        return Task.CompletedTask;
+        var runner = new ScenarioRunner<TContext>(Details);
+
+        return runner.Execute();
     }
 }
