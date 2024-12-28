@@ -4,6 +4,10 @@ namespace Burpless;
 
 public class Feature : IEquatable<Feature>
 {
+    private Feature()
+    {
+    }
+
     public string Name { get; private set; }
 
     public string? Description { get; private set; }

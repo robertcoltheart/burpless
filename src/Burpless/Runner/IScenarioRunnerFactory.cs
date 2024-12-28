@@ -2,5 +2,5 @@
 
 internal interface IScenarioRunnerFactory
 {
-    IScenarioRunner Create<T>(ScenarioDetails<T> details, Feature? feature, IScenarioStep[] steps, Type? expectedException);
+    IScenarioRunner Create<T>(ScenarioDetails<T> details, Feature? feature, ScenarioStep<T>[] steps, Type? expectedException);
 }
