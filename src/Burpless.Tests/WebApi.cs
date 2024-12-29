@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using TUnit.Core.Interfaces;
 
 namespace Burpless.Tests;
 
-public class WebApi
+public class WebApi : IAsyncInitializer, IAsyncDisposable
 {
-    [Before(TestSession)]
-    public static Task InitializeAsync()
+    public Task InitializeAsync()
     {
         var services = new ServiceCollection()
             .BuildServiceProvider();
@@ -13,5 +13,10 @@ public class WebApi
         Configuration.Initialize(x => x.UseServiceProvider(services));
 
         return Task.CompletedTask;
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        return ValueTask.CompletedTask;
     }
 }
