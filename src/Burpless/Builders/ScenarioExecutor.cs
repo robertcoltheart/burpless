@@ -18,7 +18,7 @@ public class ScenarioExecutor<TContext>
         return ExecuteAsync().GetAwaiter();
     }
 
-    internal void AddStep(string name, StepType type, Func<TContext, StepResult, Task> action)
+    internal void AddStep(string name, StepType type, Func<TContext, Task> action)
     {
         var scenarioStep = new ScenarioStep<TContext>(name, type, action);
 

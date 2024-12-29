@@ -10,7 +10,5 @@ internal class ScenarioDetails<TContext>
 
     public Feature? Feature { get; set; }
 
-    public Type? ExpectedException { get; set; }
-
     public List<ScenarioStep<TContext>> Steps { get; } = [];
 }
