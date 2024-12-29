@@ -4,30 +4,31 @@ namespace Burpless.Tests.Builders;
 
 public class DescriptionBuilderTests
 {
-    [Fact]
-    public void CanSetNameViaBuilder()
+    [Test]
+    public async Task CanSetNameViaBuilder()
     {
         var builder = new DescriptionBuilder<object>()
             .Name("ScenarioName");
 
-        Assert.Equal("ScenarioName", builder.Details.Name);
+        await Assert.That(builder.Details.Name).IsEqualTo("ScenarioName");
     }
 
-    [Fact]
-    public void CanSetDescription()
+    [Test]
+    public async Task CanSetDescription()
     {
         var builder = new DescriptionBuilder<object>()
             .Description("MyDescription");
 
-        Assert.Equal("MyDescription", builder.Details.Description);
+        await Assert.That(builder.Details.Description).IsEqualTo("MyDescription");
     }
 
-    [Fact]
-    public void CanSetTags()
+    [Test]
+    public async Task CanSetTags()
     {
         var builder = new DescriptionBuilder<object>()
             .Tags("tag1", "tag2");
 
-        Assert.Contains(builder.Details.Tags, ["tag1", "tag2"]);
+        await Assert.That(builder.Details.Tags).Contains("tag1");
+        await Assert.That(builder.Details.Tags).Contains("tag2");
     }
 }

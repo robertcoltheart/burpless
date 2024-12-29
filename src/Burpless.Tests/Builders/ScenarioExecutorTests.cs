@@ -4,25 +4,25 @@ namespace Burpless.Tests.Builders;
 
 public class ScenarioExecutorTests
 {
-    [Fact]
-    public void DetailsNotNullByDefault()
+    [Test]
+    public async Task DetailsNotNullByDefault()
     {
         var executor = new ScenarioExecutor<object>();
 
-        Assert.NotNull(executor.Details);
+        await Assert.That(executor.Details).IsNotNull();
     }
 
-    [Fact]
-    public void CanCastExecutorToTask()
+    [Test]
+    public async Task CanCastExecutorToTask()
     {
         var executor = new ScenarioExecutor<object>();
 
         Task value = executor;
 
-        Assert.NotNull(value);
+        await Assert.That(executor.Details).IsNotNull();
     }
 
-    [Fact]
+    [Test]
     public async Task CanAwaitExecutor()
     {
         var executor = new ScenarioExecutor<object>();

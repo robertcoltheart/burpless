@@ -4,56 +4,56 @@ namespace Burpless.Tests.Builders;
 
 public class WhenBuilderTests
 {
-    [Fact]
-    public void WhenExpressionsAddStep()
+    [Test]
+    public async Task WhenExpressionsAddStep()
     {
         var builder = new WhenBuilder<Context>()
             .When(x => x.Work());
 
         var step = builder.Details.Steps.FirstOrDefault();
 
-        Assert.NotNull(step);
-        Assert.Equal(StepType.When, step.Type);
-        Assert.Equal("Work", step.Name);
+        await Assert.That(step).IsNotNull();
+        await Assert.That(step?.Type).IsEqualTo(StepType.When);
+        await Assert.That(step?.Name).IsEqualTo("Work");
     }
 
-    [Fact]
-    public void WhenAsyncExpressionsAddStep()
+    [Test]
+    public async Task WhenAsyncExpressionsAddStep()
     {
         var builder = new WhenBuilder<Context>()
             .When(x => x.WorkAsync());
 
         var step = builder.Details.Steps.FirstOrDefault();
 
-        Assert.NotNull(step);
-        Assert.Equal(StepType.When, step.Type);
-        Assert.Equal("WorkAsync", step.Name);
+        await Assert.That(step).IsNotNull();
+        await Assert.That(step?.Type).IsEqualTo(StepType.When);
+        await Assert.That(step?.Name).IsEqualTo("WorkAsync");
     }
 
-    [Fact]
-    public void WhenNamedExpressionsAddStep()
+    [Test]
+    public async Task WhenNamedExpressionsAddStep()
     {
         var builder = new WhenBuilder<Context>()
             .When("MyWork", x => x.Work());
 
         var step = builder.Details.Steps.FirstOrDefault();
 
-        Assert.NotNull(step);
-        Assert.Equal(StepType.When, step.Type);
-        Assert.Equal("MyWork", step.Name);
+        await Assert.That(step).IsNotNull();
+        await Assert.That(step?.Type).IsEqualTo(StepType.When);
+        await Assert.That(step?.Name).IsEqualTo("MyWork");
     }
 
-    [Fact]
-    public void WhenNamedAsyncExpressionsAddStep()
+    [Test]
+    public async Task WhenNamedAsyncExpressionsAddStep()
     {
         var builder = new WhenBuilder<Context>()
             .When("MyWorkAsync", x => x.WorkAsync());
 
         var step = builder.Details.Steps.FirstOrDefault();
 
-        Assert.NotNull(step);
-        Assert.Equal(StepType.When, step.Type);
-        Assert.Equal("MyWorkAsync", step.Name);
+        await Assert.That(step).IsNotNull();
+        await Assert.That(step?.Type).IsEqualTo(StepType.When);
+        await Assert.That(step?.Name).IsEqualTo("MyWorkAsync");
     }
 
     private class Context

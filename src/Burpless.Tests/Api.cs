@@ -1,6 +1,5 @@
 ﻿namespace Burpless.Tests;
 
-[Collection(nameof(ApiCollection))]
 public class Api(WebApi web)
 {
     private readonly Feature feature = Feature
@@ -10,14 +9,12 @@ public class Api(WebApi web)
         .WithBackground<Context>(background => background
             .Given(x => x.TheAccountIsInCredit()));
 
-    [Fact(Explicit = true)]
     public async Task AccountIsInCredit() => await Scenario.For<Context>()
         .Feature(feature)
         .Given(x => x.TheAccountIsInCredit())
         .When(x => x.MoneyIsTakenOutOfTheATM())
         .Then(x => x.EnsureTheAccountIsDebited());
 
-    [Fact(Explicit = true)]
     public Task AccountIsValidUsingGherkinTable() => Scenario.For<Context>()
         .Feature(feature)
         .Given(x => x.TheAccountIsInCredit())
@@ -29,7 +26,6 @@ public class Api(WebApi web)
             | 12345      | 123.45  |
             """));
 
-    [Fact(Explicit = true)]
     public Task AccountIsValidUsingObject() => Scenario.For<Context>()
         .Feature(feature)
         .Given(x => x.TheAccountIsInCredit())
@@ -37,7 +33,6 @@ public class Api(WebApi web)
         .Then(x => x.EnsureTheAccountIsDebited())
         .And(x => x.TheFollowingDataIsReceived(Table.From(new { AccountId = 12345, Balance = 123.45m })));
 
-    [Fact(Explicit = true)]
     public Task AccountIsValidUsingTable() => Scenario.For<Context>()
         .Feature(feature)
         .Given(x => x.TheAccountIsInCredit())

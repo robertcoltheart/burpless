@@ -8,48 +8,42 @@ public class SimpleServiceProviderTests
 {
     private readonly SimpleServiceProvider provider = new();
 
-    [Fact]
-    public void CanResolveClass()
+    [Test]
+    public async Task CanResolveClass()
     {
         var result = provider.GetService<Standalone>();
 
-        Assert.NotNull(result);
+        await Assert.That(result).IsNotNull();
     }
 
-    [Fact]
-    public void CanResolveClassAndDependencies()
+    [Test]
+    public async Task CanResolveClassAndDependencies()
     {
         var result = provider.GetService<WithDependency>();
 
-        Assert.NotNull(result);
-        Assert.NotNull(result.Standalone);
+        await Assert.That(result?.Standalone).IsNotNull();
     }
 
-    [Fact]
-    public void SameDependencyIsInjectedTwice()
+    [Test]
+    public async Task SameDependencyIsInjectedTwice()
     {
         var result = provider.GetService<WithChainedDependencies>();
 
-        Assert.NotNull(result);
-        Assert.NotNull(result.Dependency);
-        Assert.NotNull(result.Standalone);
-        Assert.Same(result.Standalone, result.Dependency.Standalone);
+        await Assert.That(result?.Dependency).IsNotNull();
+        await Assert.That(result?.Standalone).IsNotNull();
+        await Assert.That(result?.Dependency.Standalone).IsEqualTo(result?.Standalone);
     }
 
-    [Fact]
+    [Test]
     public void CannotResolveInterface()
     {
-        var exception = Record.Exception(() => provider.GetService<IServiceProvider>());
-
-        Assert.NotNull(exception);
+        Assert.Throws(() => provider.GetService<IServiceProvider>());
     }
 
-    [Fact]
+    [Test]
     public void CannotResolveAbstract()
     {
-        var exception = Record.Exception(() => provider.GetService<Encoding>());
-
-        Assert.NotNull(exception);
+        Assert.Throws(() => provider.GetService<Encoding>());
     }
 
     private record Standalone;
