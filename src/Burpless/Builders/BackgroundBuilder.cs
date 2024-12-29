@@ -28,7 +28,7 @@ public class BackgroundBuilder<TContext>
 
     public BackgroundContinuationBuilder<TContext> Given(string step, Func<TContext, Task> action)
     {
-        var backgroundStep = new ScenarioStep<TContext>(step, StepType.Given, (context, _) => action(context));
+        var backgroundStep = new ScenarioStep<TContext>(step, StepType.Given, action);
 
         Steps.Add(backgroundStep);
 

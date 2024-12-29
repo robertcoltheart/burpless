@@ -1,6 +1,6 @@
 ﻿namespace Burpless.Builders;
 
-public class DescriptionBuilder<TContext> : GivenBuilder<TContext>
+public class DescriptionBuilder<TContext> : GivenWhenThenBuilder<TContext>
     where TContext : class
 {
     internal DescriptionBuilder()
