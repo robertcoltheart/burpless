@@ -2,12 +2,12 @@
 
 public class ScenarioTests
 {
-    [Fact]
-    public void ScenarioNameDeterminedFromMethod()
+    [Test]
+    public async Task ScenarioNameDeterminedFromMethod()
     {
         var scenario = Scenario.For<object>();
 
-        Assert.NotNull(scenario);
-        Assert.Equal(nameof(ScenarioNameDeterminedFromMethod), scenario.Details.Name);
+        await Assert.That(scenario).IsNotNull();
+        await Assert.That(scenario.Details.Name).IsEqualTo(nameof(ScenarioNameDeterminedFromMethod));
     }
 }

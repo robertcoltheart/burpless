@@ -4,12 +4,12 @@ namespace Burpless.Tests.Builders;
 
 public class ThenBuilderTests
 {
-    [Theory]
-    [InlineData("Work")]
-    [InlineData("WorkAsync")]
-    [InlineData("MyWork")]
-    [InlineData("MyWorkAsync")]
-    public void ThenExpressionsAddStep(string name)
+    [Test]
+    [Arguments("Work")]
+    [Arguments("WorkAsync")]
+    [Arguments("MyWork")]
+    [Arguments("MyWorkAsync")]
+    public async Task ThenExpressionsAddStep(string name)
     {
         var builder = new ThenBuilder<Context>()
             .Then(x => x.Work())
@@ -19,16 +19,16 @@ public class ThenBuilderTests
 
         var step = builder.Details.Steps.FirstOrDefault(x => x.Name == name);
 
-        Assert.NotNull(step);
-        Assert.Equal(StepType.Then, step.Type);
+        await Assert.That(step).IsNotNull();
+        await Assert.That(step?.Type).IsEqualTo(StepType.Then);
     }
 
-    [Theory]
-    [InlineData("Work")]
-    [InlineData("WorkAsync")]
-    [InlineData("MyWork")]
-    [InlineData("MyWorkAsync")]
-    public void ThenExpressionsWithResultAddStep(string name)
+    [Test]
+    [Arguments("Work")]
+    [Arguments("WorkAsync")]
+    [Arguments("MyWork")]
+    [Arguments("MyWorkAsync")]
+    public async Task ThenExpressionsWithResultAddStep(string name)
     {
         var builder = new ThenBuilder<Context>()
             .Then((x, r) => x.Work())
@@ -38,16 +38,16 @@ public class ThenBuilderTests
 
         var step = builder.Details.Steps.FirstOrDefault(x => x.Name == name);
 
-        Assert.NotNull(step);
-        Assert.Equal(StepType.Then, step.Type);
+        await Assert.That(step).IsNotNull();
+        await Assert.That(step?.Type).IsEqualTo(StepType.Then);
     }
 
-    [Theory]
-    [InlineData("Work")]
-    [InlineData("WorkAsync")]
-    [InlineData("MyWork")]
-    [InlineData("MyWorkAsync")]
-    public void ThenAndContinuationExpressionsAddStep(string name)
+    [Test]
+    [Arguments("Work")]
+    [Arguments("WorkAsync")]
+    [Arguments("MyWork")]
+    [Arguments("MyWorkAsync")]
+    public async Task ThenAndContinuationExpressionsAddStep(string name)
     {
         var builder = new ThenBuilder<Context>()
             .Then(x => x.Dummy())
@@ -58,16 +58,16 @@ public class ThenBuilderTests
 
         var step = builder.Details.Steps.FirstOrDefault(x => x.Name == name);
 
-        Assert.NotNull(step);
-        Assert.Equal(StepType.Then, step.Type);
+        await Assert.That(step).IsNotNull();
+        await Assert.That(step?.Type).IsEqualTo(StepType.Then);
     }
 
-    [Theory]
-    [InlineData("Work")]
-    [InlineData("WorkAsync")]
-    [InlineData("MyWork")]
-    [InlineData("MyWorkAsync")]
-    public void ThenAndContinuationExpressionsWithResultAddStep(string name)
+    [Test]
+    [Arguments("Work")]
+    [Arguments("WorkAsync")]
+    [Arguments("MyWork")]
+    [Arguments("MyWorkAsync")]
+    public async Task ThenAndContinuationExpressionsWithResultAddStep(string name)
     {
         var builder = new ThenBuilder<Context>()
             .Then((x, r) => x.Dummy())
@@ -78,16 +78,16 @@ public class ThenBuilderTests
 
         var step = builder.Details.Steps.FirstOrDefault(x => x.Name == name);
 
-        Assert.NotNull(step);
-        Assert.Equal(StepType.Then, step.Type);
+        await Assert.That(step).IsNotNull();
+        await Assert.That(step?.Type).IsEqualTo(StepType.Then);
     }
 
-    [Theory]
-    [InlineData("Work")]
-    [InlineData("WorkAsync")]
-    [InlineData("MyWork")]
-    [InlineData("MyWorkAsync")]
-    public void ThenButContinuationExpressionsAddStep(string name)
+    [Test]
+    [Arguments("Work")]
+    [Arguments("WorkAsync")]
+    [Arguments("MyWork")]
+    [Arguments("MyWorkAsync")]
+    public async Task ThenButContinuationExpressionsAddStep(string name)
     {
         var builder = new ThenBuilder<Context>()
             .Then(x => x.Dummy())
@@ -98,16 +98,16 @@ public class ThenBuilderTests
 
         var step = builder.Details.Steps.FirstOrDefault(x => x.Name == name);
 
-        Assert.NotNull(step);
-        Assert.Equal(StepType.Then, step.Type);
+        await Assert.That(step).IsNotNull();
+        await Assert.That(step?.Type).IsEqualTo(StepType.Then);
     }
 
-    [Theory]
-    [InlineData("Work")]
-    [InlineData("WorkAsync")]
-    [InlineData("MyWork")]
-    [InlineData("MyWorkAsync")]
-    public void ThenButContinuationExpressionsWithResultAddStep(string name)
+    [Test]
+    [Arguments("Work")]
+    [Arguments("WorkAsync")]
+    [Arguments("MyWork")]
+    [Arguments("MyWorkAsync")]
+    public async Task ThenButContinuationExpressionsWithResultAddStep(string name)
     {
         var builder = new ThenBuilder<Context>()
             .Then((x, r) => x.Dummy())
@@ -118,37 +118,37 @@ public class ThenBuilderTests
 
         var step = builder.Details.Steps.FirstOrDefault(x => x.Name == name);
 
-        Assert.NotNull(step);
-        Assert.Equal(StepType.Then, step.Type);
+        await Assert.That(step).IsNotNull();
+        await Assert.That(step?.Type).IsEqualTo(StepType.Then);
     }
 
-    [Theory]
-    [InlineData(typeof(InvalidOperationException))]
-    [InlineData(typeof(ArgumentException))]
-    public void CanExpectException(Type exception)
+    [Test]
+    [Arguments(typeof(InvalidOperationException))]
+    [Arguments(typeof(ArgumentException))]
+    public async Task CanExpectException(Type exception)
     {
         var builder = new ThenBuilder<Context>()
             .ThenExceptionIsThrown(exception);
 
-        Assert.Equal(exception, builder.Details.ExpectedException);
+        await Assert.That(builder.Details.ExpectedException).IsEqualTo(exception);
     }
 
-    [Fact]
-    public void CanExpectDefaultException()
+    [Test]
+    public async Task CanExpectDefaultException()
     {
         var builder = new ThenBuilder<Context>()
             .ThenExceptionIsThrown();
 
-        Assert.Equal(typeof(Exception), builder.Details.ExpectedException);
+        await Assert.That(builder.Details.ExpectedException).IsEqualTo(typeof(Exception));
     }
 
-    [Fact]
-    public void CanExpectTypedException()
+    [Test]
+    public async Task CanExpectTypedException()
     {
         var builder = new ThenBuilder<Context>()
             .ThenExceptionIsThrown<InvalidOperationException>();
 
-        Assert.Equal(typeof(InvalidOperationException), builder.Details.ExpectedException);
+        await Assert.That(builder.Details.ExpectedException).IsEqualTo(typeof(InvalidOperationException));
     }
 
     private class Context

@@ -4,12 +4,12 @@ namespace Burpless.Tests.Builders;
 
 public class GivenBuilderTests
 {
-    [Theory]
-    [InlineData("Work")]
-    [InlineData("WorkAsync")]
-    [InlineData("MyWork")]
-    [InlineData("MyWorkAsync")]
-    public void GivenExpressionsAddStep(string name)
+    [Test]
+    [Arguments("Work")]
+    [Arguments("WorkAsync")]
+    [Arguments("MyWork")]
+    [Arguments("MyWorkAsync")]
+    public async Task GivenExpressionsAddStep(string name)
     {
         var builder = new GivenBuilder<Context>()
             .Given(x => x.Work())
@@ -19,16 +19,16 @@ public class GivenBuilderTests
 
         var step = builder.Details.Steps.FirstOrDefault(x => x.Name == name);
 
-        Assert.NotNull(step);
-        Assert.Equal(StepType.Given, step.Type);
+        await Assert.That(step).IsNotNull();
+        await Assert.That(step?.Type).IsEqualTo(StepType.Given);
     }
 
-    [Theory]
-    [InlineData("Work")]
-    [InlineData("WorkAsync")]
-    [InlineData("MyWork")]
-    [InlineData("MyWorkAsync")]
-    public void GivenAndContinuationExpressionsAddStep(string name)
+    [Test]
+    [Arguments("Work")]
+    [Arguments("WorkAsync")]
+    [Arguments("MyWork")]
+    [Arguments("MyWorkAsync")]
+    public async Task GivenAndContinuationExpressionsAddStep(string name)
     {
         var builder = new GivenBuilder<Context>()
             .Given(x => x.Dummy())
@@ -39,16 +39,16 @@ public class GivenBuilderTests
 
         var step = builder.Details.Steps.FirstOrDefault(x => x.Name == name);
 
-        Assert.NotNull(step);
-        Assert.Equal(StepType.Given, step.Type);
+        await Assert.That(step).IsNotNull();
+        await Assert.That(step?.Type).IsEqualTo(StepType.Given);
     }
 
-    [Theory]
-    [InlineData("Work")]
-    [InlineData("WorkAsync")]
-    [InlineData("MyWork")]
-    [InlineData("MyWorkAsync")]
-    public void GivenButContinuationExpressionsAddStep(string name)
+    [Test]
+    [Arguments("Work")]
+    [Arguments("WorkAsync")]
+    [Arguments("MyWork")]
+    [Arguments("MyWorkAsync")]
+    public async Task GivenButContinuationExpressionsAddStep(string name)
     {
         var builder = new GivenBuilder<Context>()
             .Given(x => x.Dummy())
@@ -59,8 +59,8 @@ public class GivenBuilderTests
 
         var step = builder.Details.Steps.FirstOrDefault(x => x.Name == name);
 
-        Assert.NotNull(step);
-        Assert.Equal(StepType.Given, step.Type);
+        await Assert.That(step).IsNotNull();
+        await Assert.That(step?.Type).IsEqualTo(StepType.Given);
     }
 
     private class Context

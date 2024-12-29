@@ -4,22 +4,22 @@ namespace Burpless.Tests.Builders;
 
 public class ScenarioGroupingBuilderTests
 {
-    [Fact]
-    public void SetsScenarioNameViaConstructor()
+    [Test]
+    public async Task SetsScenarioNameViaConstructor()
     {
         var builder = new ScenarioGroupingBuilder<object>("MyName");
 
-        Assert.Equal("MyName", builder.Details.Name);
+        await Assert.That(builder.Details.Name).IsEqualTo("MyName");
     }
 
-    [Fact]
-    public void CanSetFeature()
+    [Test]
+    public async Task CanSetFeature()
     {
         var feature = Feature.Named("feature");
         
         var builder = new ScenarioGroupingBuilder<object>("name")
             .Feature(feature);
 
-        Assert.Same(feature, builder.Details.Feature);
+        await Assert.That(builder.Details.Feature).IsEqualTo(feature);
     }
 }

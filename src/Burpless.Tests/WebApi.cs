@@ -2,20 +2,16 @@
 
 namespace Burpless.Tests;
 
-public class WebApi : IAsyncLifetime
+public class WebApi
 {
-    public ValueTask InitializeAsync()
+    [Before(TestSession)]
+    public static Task InitializeAsync()
     {
         var services = new ServiceCollection()
             .BuildServiceProvider();
 
         Configuration.Initialize(x => x.UseServiceProvider(services));
 
-        return ValueTask.CompletedTask;
-    }
-
-    public ValueTask DisposeAsync()
-    {
-        return ValueTask.CompletedTask;
+        return Task.CompletedTask;
     }
 }

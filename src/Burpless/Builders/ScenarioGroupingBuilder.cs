@@ -3,7 +3,7 @@
 public class ScenarioGroupingBuilder<TContext> : DescriptionBuilder<TContext>
     where TContext : class
 {
-    internal ScenarioGroupingBuilder(string name)
+    internal ScenarioGroupingBuilder(string? name)
     {
         Details.Name = name;
     }
