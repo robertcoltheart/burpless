@@ -14,6 +14,8 @@ public class Feature : IEquatable<Feature>
 
     public IReadOnlyCollection<string> Tags { get; private set; }
 
+    internal IReadOnlyCollection<IScenarioStep>? Steps { get; private set; }
+
     public static Feature Named(string name)
     {
         return new Feature
@@ -46,6 +48,11 @@ public class Feature : IEquatable<Feature>
     public Feature WithBackground<TContext>(Action<BackgroundBuilder<TContext>> action)
         where TContext : class
     {
+        var builder = new BackgroundBuilder<TContext>();
+        action(builder);
+
+        Steps = builder.Steps;
+
         return this;
     }
 

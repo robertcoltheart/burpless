@@ -1,18 +1,34 @@
-﻿namespace Burpless.Runner;
+﻿using System.Collections.Concurrent;
 
-internal class ScenarioRunner<T>(ScenarioDetails<T> details) : IScenarioRunner
+namespace Burpless.Runner;
+
+internal class ScenarioRunner<TContext>(IServiceProvider services, ScenarioDetails<TContext> details)
+    where TContext : class
 {
-    public Task Execute()
+    private readonly ConcurrentDictionary<Type, object> contexts = new();
+
+    public async Task Execute()
     {
-        var provider = Configuration.Instance.Services;
-
-        var context = provider.GetService(typeof(T));
-
-        if (details.Feature != null)
+        if (details.Feature?.Steps != null)
         {
+            foreach (var step in details.Feature.Steps)
+            {
+                var featureContext = GetContext(step.ContextType);
 
+                await step.Execute(featureContext);
+            }
         }
 
-        return Task.CompletedTask;
+        var context = GetContext(typeof(TContext));
+
+        foreach (var step in details.Steps)
+        {
+            await step.Execute(context);
+        }
+    }
+
+    private object GetContext(Type contextType)
+    {
+        return contexts.GetOrAdd(contextType, _ => services.GetService(contextType));
     }
 }
