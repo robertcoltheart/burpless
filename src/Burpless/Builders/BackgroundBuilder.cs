@@ -9,7 +9,7 @@ public class BackgroundBuilder<TContext>
     {
     }
 
-    internal List<ScenarioStep<TContext>> Steps { get; set; } = [];
+    internal List<IScenarioStep> Steps { get; set; } = [];
 
     public BackgroundContinuationBuilder<TContext> Given(Expression<Action<TContext>> action)
     {

@@ -1,7 +1,6 @@
 ﻿namespace Burpless.Tests;
 
-[ClassDataSource<WebApi>(Shared = SharedType.PerTestSession)]
-public class Api(WebApi web)
+public class Api
 {
     private readonly Feature feature = Feature
         .Named("Cash machine")

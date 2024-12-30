@@ -6,6 +6,10 @@ namespace Burpless.Builders;
 public class ScenarioExecutor<TContext>
     where TContext : class
 {
+    internal ScenarioExecutor()
+    {
+    }
+
     internal ScenarioDetails<TContext> Details { get; set; } = new();
 
     public static implicit operator Task(ScenarioExecutor<TContext> executor)
@@ -27,7 +31,7 @@ public class ScenarioExecutor<TContext>
 
     private Task ExecuteAsync()
     {
-        var runner = new ScenarioRunner<TContext>(Details);
+        var runner = new ScenarioRunner<TContext>(Configuration.Instance.Services, Details);
 
         return runner.Execute();
     }
