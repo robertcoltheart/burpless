@@ -8,8 +8,6 @@ internal class ScenarioStep<T>(string name, StepType type, Func<T, Task> action)
 
     public Type ContextType { get; } = typeof(T);
 
-    public Func<T, Task> Action { get; } = action;
-
     public Task Execute(object context)
     {
         if (context is not T typedContext)
@@ -17,6 +15,6 @@ internal class ScenarioStep<T>(string name, StepType type, Func<T, Task> action)
             throw new ArgumentException($"Invalid context type, expected {typeof(T)} but got {context.GetType()}");
         }
 
-        return Action(typedContext);
+        return action(typedContext);
     }
 }
