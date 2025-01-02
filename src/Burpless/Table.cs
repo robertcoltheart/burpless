@@ -4,9 +4,9 @@ public class Table
 {
     private static readonly TableParser Parser = new();
 
-    public ICollection<string> Columns { get; private set; } = [];
+    public IList<string> Columns { get; private set; } = [];
 
-    public ICollection<string?[]> Rows { get; } = [];
+    public IList<string?[]> Rows { get; } = [];
 
     public static implicit operator Table(string value)
     {

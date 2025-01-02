@@ -46,9 +46,14 @@ internal class TableParser
 
         using var reader = new StringReader(value.Trim());
 
-        if (reader.Peek() != '|')
+        if (!value.StartsWith('|'))
         {
             throw new ArgumentException("Table row must start with '|'");
+        }
+
+        if (!value.EndsWith('|'))
+        {
+            throw new ArgumentException("Table row must end with '|'");
         }
 
         reader.Read();
@@ -80,13 +85,21 @@ internal class TableParser
             {
                 reader.Read();
 
-                if (reader.Peek() == 'n')
+                if (IsEndOfReader(reader))
+                {
+                    buffer.Append('\\');
+                }
+                else if (reader.Peek() == 'n')
                 {
                     buffer.Append('\n');
                 }
-                else if (reader.Peek() != '|' && reader.Peek() != '\\')
+                else
                 {
-                    buffer.Append('\\');
+                    if (reader.Peek() != '|' && reader.Peek() != '\\')
+                    {
+                        buffer.Append('\\');
+                    }
+
                     buffer.Append((char)reader.Peek());
                 }
             }
