@@ -19,6 +19,11 @@ internal class TableParser
 
         while (row.Any())
         {
+            if (IsEndOfReader(reader))
+            {
+                break;
+            }
+
             row = ReadCells(reader.ReadLine()).ToArray();
 
             if (row.Length != table.Columns.Count)

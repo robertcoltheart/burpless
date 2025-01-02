@@ -4,9 +4,9 @@ public class Table
 {
     private static readonly TableParser Parser = new();
 
-    public List<string> Columns { get; private set; } = [];
+    public ICollection<string> Columns { get; private set; } = [];
 
-    public List<string?[]> Rows { get; } = [];
+    public ICollection<string?[]> Rows { get; } = [];
 
     public static implicit operator Table(string value)
     {
@@ -36,20 +36,36 @@ public class Table
 
     public static Table From<T>(params T[] values)
     {
-        return new Table();
+        return From(values.AsEnumerable());
     }
 
     public static Table From<T>(params IEnumerable<T> values)
     {
-        return new Table();
+        var properties = typeof(T).GetProperties()
+            .Where(p => p.CanRead)
+            .ToArray();
+
+        var columns = properties
+            .Select(p => p.Name)
+            .ToArray();
+
+        var table = WithColumns(columns);
+
+        foreach (var value in values)
+        {
+            var cells = properties
+                .Select(x => x.GetValue(value))
+                .Select(x => x?.ToString());
+
+            table.AddRow(cells);
+        }
+
+        return table;
     }
 
     public static Table WithColumns(params string[] columns)
     {
-        return new Table
-        {
-            Columns = [.. columns]
-        };
+        return WithColumns(columns.AsEnumerable());
     }
 
     public static Table WithColumns(params IEnumerable<string> columns)
@@ -60,15 +76,21 @@ public class Table
         };
     }
 
-    public Table AddRow(params object?[] values)
+    public Table AddRow(params string?[] values)
     {
-        var stringValues = values
-            .Select(x => x?.ToString())
-            .ToArray();
+        return AddRow(values.AsEnumerable());
+    }
 
-        Rows.Add(stringValues);
+    public Table AddRow(params IEnumerable<string?> values)
+    {
+        Rows.Add(values.ToArray());
 
         return this;
+    }
+
+    public Table AddRow(params object?[] values)
+    {
+        return AddRow(values.AsEnumerable());
     }
 
     public Table AddRow(params IEnumerable<object?> values)
