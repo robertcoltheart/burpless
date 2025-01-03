@@ -51,4 +51,9 @@ public class WeatherContext(IWebApiClient client) : ServerContext
     {
         await Assert.That(exception).IsNotNull();
     }
+
+    public async Task TheFollowingDataIsReturned(Table table)
+    {
+        table.ShouldEqual(weather);
+    }
 }

@@ -2,31 +2,70 @@
 
 public class Table
 {
-    public List<string> Columns { get; private set; } = [];
+    private static readonly TableParser Parser = new();
 
-    public List<object?[]> Rows { get; } = [];
+    public IList<string> Columns { get; private set; } = [];
+
+    public IList<string?[]> Rows { get; } = [];
 
     public static implicit operator Table(string value)
     {
-        return null;
+        return Parse(value);
+    }
+
+    public static Table Parse(string value)
+    {
+        return Parser.Parse(value);
+    }
+
+    public static bool TryParse(string value, out Table table)
+    {
+        try
+        {
+            table = Parse(value);
+
+            return true;
+        }
+        catch
+        {
+            table = null!;
+
+            return false;
+        }
     }
 
     public static Table From<T>(params T[] values)
     {
-        return new Table();
+        return From(values.AsEnumerable());
     }
 
     public static Table From<T>(params IEnumerable<T> values)
     {
-        return new Table();
+        var properties = typeof(T).GetProperties()
+            .Where(p => p.CanRead)
+            .ToArray();
+
+        var columns = properties
+            .Select(p => p.Name)
+            .ToArray();
+
+        var table = WithColumns(columns);
+
+        foreach (var value in values)
+        {
+            var cells = properties
+                .Select(x => x.GetValue(value))
+                .Select(x => x?.ToString());
+
+            table.AddRow(cells);
+        }
+
+        return table;
     }
 
     public static Table WithColumns(params string[] columns)
     {
-        return new Table
-        {
-            Columns = [.. columns]
-        };
+        return WithColumns(columns.AsEnumerable());
     }
 
     public static Table WithColumns(params IEnumerable<string> columns)
@@ -37,16 +76,30 @@ public class Table
         };
     }
 
-    public Table AddRow(params object?[] values)
+    public Table AddRow(params string?[] values)
+    {
+        return AddRow(values.AsEnumerable());
+    }
+
+    public Table AddRow(params IEnumerable<string?> values)
     {
         Rows.Add(values.ToArray());
 
         return this;
     }
 
+    public Table AddRow(params object?[] values)
+    {
+        return AddRow(values.AsEnumerable());
+    }
+
     public Table AddRow(params IEnumerable<object?> values)
     {
-        Rows.Add(values.ToArray());
+        var stringValues = values
+            .Select(x => x?.ToString())
+            .ToArray();
+
+        Rows.Add(stringValues);
 
         return this;
     }

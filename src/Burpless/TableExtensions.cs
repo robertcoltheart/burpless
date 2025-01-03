@@ -11,4 +11,12 @@ public static class TableExtensions
     {
         return null;
     }
+
+    public static void ShouldEqual<T>(this Table table, T value)
+    {
+    }
+
+    public static void ShouldEqual<T>(this Table table, IEnumerable<T> values)
+    {
+    }
 }
