@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Burpless.Example.WebApi.Tests;
 
-public class ApplicationFactory : WebApplicationFactory<Program>
+internal class ApplicationFactory : WebApplicationFactory<Program>
 {
     private static ApplicationFactory? instance;
 
