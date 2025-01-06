@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Reflection;
 
-namespace Burpless;
+namespace Burpless.Tables;
 
 internal class TableSerializer
 {

@@ -1,3 +1,5 @@
+using Burpless.Tables;
+
 namespace Burpless;
 
 public static class TableExtensions

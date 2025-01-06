@@ -1,4 +1,4 @@
-﻿namespace Burpless;
+﻿namespace Burpless.Tables;
 
 internal class TableColumnFormatter
 {

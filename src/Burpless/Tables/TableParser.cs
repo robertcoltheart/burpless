@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Burpless;
+namespace Burpless.Tables;
 
 internal class TableParser
 {

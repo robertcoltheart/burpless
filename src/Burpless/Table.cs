@@ -1,4 +1,6 @@
-﻿namespace Burpless;
+﻿using Burpless.Tables;
+
+namespace Burpless;
 
 public class Table
 {
@@ -74,6 +76,36 @@ public class Table
         {
             Columns = [..columns]
         };
+    }
+
+    public static bool IsValid<T>(Table table, params IEnumerable<T> data)
+        where T : new()
+    {
+        return IsValid<T>(table, x => x.WithData(data));
+    }
+
+    public static bool IsValid<T>(Table table, Action<ITableValidator<T>> configure)
+        where T : new()
+    {
+        var validator = new TableValidator<T>();
+        configure(validator);
+
+        return validator.IsValid(table);
+    }
+
+    public static void Validate<T>(Table table, params IEnumerable<T> data)
+        where T : new()
+    {
+        Validate<T>(table, x => x.WithData(data));
+    }
+
+    public static void Validate<T>(Table table, Action<ITableValidator<T>> configure)
+        where T : new()
+    {
+        var validator = new TableValidator<T>();
+        configure(validator);
+
+        validator.Validate(table);
     }
 
     public Table AddRow(params string?[] values)

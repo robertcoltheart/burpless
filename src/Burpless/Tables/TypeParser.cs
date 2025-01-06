@@ -2,7 +2,7 @@
 using System.Numerics;
 using System.Reflection;
 
-namespace Burpless;
+namespace Burpless.Tables;
 
 internal static class TypeParser
 {
@@ -10,6 +10,7 @@ internal static class TypeParser
 
     private static readonly HashSet<Type> ParseableTypes =
     [
+        typeof(bool),
         typeof(byte),
         typeof(sbyte),
         typeof(char),
@@ -60,7 +61,7 @@ internal static class TypeParser
 
                     return true;
                 }
-                catch (TargetInvocationException ex) when(ex.InnerException is FormatException)
+                catch (TargetInvocationException ex) when (ex.InnerException is FormatException)
                 {
                 }
             }
@@ -100,6 +101,7 @@ internal static class TypeParser
     {
         return type switch
         {
+            _ when type == typeof(bool) => TryParse<bool>(value, out parsed),
             _ when type == typeof(byte) => TryParse<byte>(value, out parsed),
             _ when type == typeof(sbyte) => TryParse<sbyte>(value, out parsed),
             _ when type == typeof(char) => TryParse<char>(value, out parsed),
