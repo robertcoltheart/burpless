@@ -49,6 +49,15 @@ public class FeatureTests
         await Assert.That(feature.Steps).IsNotEmpty();
     }
 
+    [Test]
+    public async Task FeaturesWithSameNameAreEqual()
+    {
+        var feature1 = Feature.Named("name");
+        var feature2 = Feature.Named("name");
+
+        await Assert.That(feature1).IsEqualTo(feature2);
+    }
+
     private class Context
     {
         public void Given()
