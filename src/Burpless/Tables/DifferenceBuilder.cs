@@ -33,16 +33,15 @@ internal class DifferenceBuilder
     {
         var widths = GetColumnWidths();
 
-        return new StringBuilder()
-            .Append(GetColumnHeaders(widths))
-            .Append(GetRows(widths))
-            .ToString();
+        var results = new StringBuilder();
+        AddColumnHeaders(results, widths);
+        AddRows(results, widths);
+
+        return results.ToString().TrimEnd();
     }
 
-    private string GetColumnHeaders(int[] columnWidths)
+    private void AddColumnHeaders(StringBuilder results, int[] columnWidths)
     {
-        var results = new StringBuilder();
-
         results.Append("  |");
 
         for (var i = 0; i < columnHeaders.Count; i++)
@@ -52,27 +51,21 @@ internal class DifferenceBuilder
             results.Append($" {column.PadLeft(columnWidths[i])} |");
         }
 
-        return results.ToString();
+        results.AppendLine();
     }
 
-    private string GetRows(int[] columnWidths)
+    private void AddRows(StringBuilder results, int[] columnWidths)
     {
-        var results = new StringBuilder();
-
         foreach (var difference in differences)
         {
-            if (difference.Type == ComparisonType.Missing)
+            var prefix = difference.Type switch
             {
-                results.Append("- |");
-            }
-            else if (difference.Type == ComparisonType.Additional)
-            {
-                results.Append("+ |");
-            }
-            else
-            {
-                results.Append("  |");
-            }
+                ComparisonType.Missing => "- |",
+                ComparisonType.Additional => "+ |",
+                _ => "  |"
+            };
+
+            results.Append(prefix);
 
             for (var i = 0; i < difference.Values.Length; i++)
             {
@@ -81,8 +74,6 @@ internal class DifferenceBuilder
 
             results.AppendLine();
         }
-
-        return results.ToString();
     }
 
     private int[] GetColumnWidths()

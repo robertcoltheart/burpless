@@ -11,9 +11,7 @@ internal class DifferenceComparer<T> : ITableComparer<T>
     {
         var comparer = new RowComparer<T>(table.Columns);
 
-        var comparisons = GetComparisons(table, items, comparer);
-
-        throw new NotImplementedException();
+        return GetComparisons(table, items, comparer);
     }
 
     private IEnumerable<IComparison> GetComparisons(Table table, T[] items, RowComparer<T> comparer)

@@ -47,14 +47,13 @@ public class WeatherForecastFeature
         .When(x => x.TheWeatherForecastIsFetched())
         .Then(x => x.TheFollowingDataIsReturned(
             """
-            | Weather | Something |
-            | f       | 123       |
+            | TemperatureC | Summary |
+            | 21           | Mild    |
             """))
         .And(x => x.TheFollowingDataIsReturned(Table.From(
             new Weather { TemperatureC = 10 },
             new Weather { TemperatureC = 11 })))
         .And(x => x.TheFollowingDataIsReturned(Table
-            .WithColumns("Weather", "Something")
-            .AddRow("f", "123")
-            .AddRow("weather", "123")));
+            .WithColumns("TemperatureC", "Summary")
+            .AddRow("21", "Mild")));
 }
