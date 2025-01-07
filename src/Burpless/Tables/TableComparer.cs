@@ -1,11 +1,15 @@
 ﻿namespace Burpless.Tables;
 
-internal class TableComparer
+internal class TableComparer<T>(Table table, T[] items)
 {
-    public void Compare()
+    private static readonly ITableComparer<T>[] Comparers =
+    [
+        new TypePropertiesComparer<T>(),
+        new DifferenceComparer<T>()
+    ];
+
+    public IEnumerable<IComparison> Compare()
     {
-        // TODO: Look for missing properties, and throw immediately
-        // TODO: Calculate matches, and diffs
-        // TODO: Print diff using - and +
+        return Comparers.SelectMany(comparer => comparer.Equals(table, items));
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Burpless.Tables;
 
-internal enum ComparisionType
+internal enum ComparisonType
 {
     Match,
     Missing,

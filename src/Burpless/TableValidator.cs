@@ -6,8 +6,6 @@ namespace Burpless;
 public class TableValidator<T> : ITableValidator<T>
     where T : new()
 {
-    private readonly TableColumnFormatter formatter = new();
-
     private readonly List<TableColumnCondition<T>> conditions = new();
 
     private readonly List<T> comparisonData = new();
