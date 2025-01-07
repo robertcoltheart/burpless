@@ -10,6 +10,6 @@ internal class TableComparer<T>(Table table, T[] items)
 
     public IEnumerable<IComparison> Compare()
     {
-        return Comparers.SelectMany(comparer => comparer.Equals(table, items));
+        return Comparers.SelectMany(comparer => comparer.GetComparisons(table, items));
     }
 }

@@ -2,5 +2,5 @@
 
 internal interface ITableComparer<in T>
 {
-    IEnumerable<IComparison> Equals(Table table, T[] items);
+    IEnumerable<IComparison> GetComparisons(Table table, T[] items);
 }

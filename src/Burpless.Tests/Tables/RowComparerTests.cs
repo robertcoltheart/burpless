@@ -5,9 +5,13 @@ namespace Burpless.Tests.Tables;
 public class RowComparerTests
 {
     [Test]
-    public async Task ClassValuesAreEqualToRow()
+    [Arguments(true, new[] { "1", "string-value", "true" })]
+    [Arguments(false, new[] { "2", "string-value", "true" })]
+    [Arguments(false, new[] { "1", "wrong-value", "true" })]
+    [Arguments(false, new[] { "1", "string-value", "false" })]
+    public async Task ValuesCanBeComparedWithRow(bool equal, string[] values)
     {
-        var comparer = new RowComparer<ClassWithProperties>(["Int value", "string-value", "boolvalue"]);
+        var comparer = new RowComparer<ClassWithProperties>(["IntValue", "StringValue", "BoolValue"]);
 
         var item = new ClassWithProperties
         {
@@ -16,9 +20,9 @@ public class RowComparerTests
             BoolValue = true,
         };
 
-        var result = comparer.Equivalent(item, ["1", "string-value", "true"]);
+        var result = comparer.Equivalent(item, values);
 
-        await Assert.That(result).IsTrue();
+        await Assert.That(result).IsEqualTo(equal);
     }
 
     private class ClassWithProperties
