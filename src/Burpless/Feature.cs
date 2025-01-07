@@ -38,13 +38,6 @@ public class Feature : IEquatable<Feature>
         return this;
     }
 
-    public Feature WithTags(params string[] tags)
-    {
-        Tags = [.. tags];
-
-        return this;
-    }
-
     public Feature WithBackground<TContext>(Action<BackgroundBuilder<TContext>> action)
         where TContext : class
     {
