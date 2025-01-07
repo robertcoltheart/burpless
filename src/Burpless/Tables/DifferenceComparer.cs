@@ -20,7 +20,7 @@ internal class DifferenceComparer<T> : ITableComparer<T>
 
         for (var i = 0; i < table.Rows.Count; i++)
         {
-            var index = GetIndexOf(items, table, i, comparer);
+            var index = GetIndexOf(remaining, table, i, comparer);
 
             if (index < 0)
             {
@@ -46,9 +46,9 @@ internal class DifferenceComparer<T> : ITableComparer<T>
         }
     }
 
-    private int GetIndexOf(T[] items, Table table, int index, RowComparer<T> comparer)
+    private int GetIndexOf(IList<T> items, Table table, int index, RowComparer<T> comparer)
     {
-        for (var i = 0; i < items.Length; i++)
+        for (var i = 0; i < items.Count; i++)
         {
             if (comparer.Equivalent(items[i], table.Rows[index]))
             {

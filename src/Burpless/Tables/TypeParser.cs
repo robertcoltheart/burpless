@@ -33,7 +33,8 @@ internal static class TypeParser
         typeof(Int128),
         typeof(UInt128),
         typeof(BigInteger),
-        typeof(Complex)
+        typeof(Complex),
+        typeof(string)
     ];
 
     public static bool TryParse(Type type, string? value, out object parsed)
@@ -125,6 +126,7 @@ internal static class TypeParser
             _ when type == typeof(UInt128) => TryParse<UInt128>(value, out parsed),
             _ when type == typeof(BigInteger) => TryParse<BigInteger>(value, out parsed),
             _ when type == typeof(Complex) => TryParse<Complex>(value, out parsed),
+            _ when type == typeof(string) => TryParse<string>(value, out parsed),
             _ => throw new ArgumentException($"Cannot parse type {type}")
         };
     }

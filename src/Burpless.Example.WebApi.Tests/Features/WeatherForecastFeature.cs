@@ -52,8 +52,8 @@ public class WeatherForecastFeature
             | 26           | Bracing  |
             """))
         .And(x => x.TheFollowingDataIsReturned(Table.From(
-            new Weather { TemperatureC = 25, Summary = "Freezing" },
-            new Weather { TemperatureC = 11, Summary = "Bracing" })))
+            new Weather { TemperatureC = 25, Summary = "Freezing", Date = new DateOnly(2024, 12, 25), TemperatureF = 76 },
+            new Weather { TemperatureC = 26, Summary = "Bracing", Date = new DateOnly(2024, 12, 26), TemperatureF = 78 })))
         .And(x => x.TheFollowingDataIsReturned(Table
             .WithColumns("TemperatureC", "Summary")
             .AddRow("25", "Freezing")
