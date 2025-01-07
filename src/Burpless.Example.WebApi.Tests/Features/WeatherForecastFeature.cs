@@ -47,13 +47,15 @@ public class WeatherForecastFeature
         .When(x => x.TheWeatherForecastIsFetched())
         .Then(x => x.TheFollowingDataIsReturned(
             """
-            | TemperatureC | Summary |
-            | 21           | Mild    |
+            | TemperatureC | Summary  |
+            | 25           | Freezing |
+            | 26           | Bracing  |
             """))
         .And(x => x.TheFollowingDataIsReturned(Table.From(
-            new Weather { TemperatureC = 10 },
-            new Weather { TemperatureC = 11 })))
+            new Weather { TemperatureC = 25, Summary = "Freezing" },
+            new Weather { TemperatureC = 11, Summary = "Bracing" })))
         .And(x => x.TheFollowingDataIsReturned(Table
             .WithColumns("TemperatureC", "Summary")
-            .AddRow("21", "Mild")));
+            .AddRow("25", "Freezing")
+            .AddRow("26", "Bracing")));
 }
