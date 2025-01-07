@@ -1,4 +1,4 @@
-﻿namespace Burpless.Tables;
+﻿namespace Burpless.Tables.Validation;
 
 internal class MatchedRowComparison(ComparisonType type, string?[] row) : IComparison
 {

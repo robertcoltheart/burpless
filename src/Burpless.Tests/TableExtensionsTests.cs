@@ -85,6 +85,13 @@ public class TableExtensionsTests
         await Assert.That(row.DecimalColumn).IsNull();
     }
 
+    [Test]
+    public async Task CanCompareTableWithValidator()
+    {
+        Table.Validate<PropertyClass>(validator => validator
+            .WithColumn(x => x.StringColumn, x => x == "value"));
+    }
+
     private class PropertyClass
     {
         public string StringColumn { get; set; }

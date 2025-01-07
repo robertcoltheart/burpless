@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Burpless.Tables;
+namespace Burpless.Tables.Validation;
 
 internal class DifferenceBuilder
 {

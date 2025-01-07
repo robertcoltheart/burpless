@@ -1,6 +1,6 @@
-using Burpless.Tables;
+using Burpless.Tables.Validation;
 
-namespace Burpless.Tests.Tables;
+namespace Burpless.Tests.Tables.Validation;
 
 public class DifferenceComparerTests
 {

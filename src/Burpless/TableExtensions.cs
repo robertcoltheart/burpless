@@ -1,4 +1,5 @@
 using Burpless.Tables;
+using Burpless.Tables.Validation;
 
 namespace Burpless;
 

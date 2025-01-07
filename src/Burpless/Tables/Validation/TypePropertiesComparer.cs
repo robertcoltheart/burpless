@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Burpless.Tables;
+namespace Burpless.Tables.Validation;
 
 internal class TypePropertiesComparer<T> : ITableComparer<T>
 {

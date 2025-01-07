@@ -8,6 +8,4 @@ public interface ITableValidator<T>
     ITableValidator<T> WithColumn<TValue>(Expression<Func<T, TValue>> expression, Predicate<TValue> condition);
 
     ITableValidator<T> WithColumn<TValue>(string columnName, Func<T, TValue> expression, Predicate<TValue> condition);
-
-    ITableValidator<T> WithData(params IEnumerable<T> data);
 }

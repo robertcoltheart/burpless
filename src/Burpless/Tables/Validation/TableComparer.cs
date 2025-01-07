@@ -1,4 +1,4 @@
-﻿namespace Burpless.Tables;
+﻿namespace Burpless.Tables.Validation;
 
 internal class TableComparer<T>(Table table, T[] items)
 {
