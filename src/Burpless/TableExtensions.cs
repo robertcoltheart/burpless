@@ -1,5 +1,5 @@
 using Burpless.Tables;
-using Burpless.Tables.Validation;
+using Burpless.Tables.Comparison;
 
 namespace Burpless;
 
@@ -36,7 +36,7 @@ public static class TableExtensions
             return;
         }
 
-        var results = new DifferenceBuilder()
+        var results = new ComparisonBuilder()
             .AppendTableHeaders(table.Columns);
 
         foreach (var difference in differences)
@@ -49,8 +49,8 @@ public static class TableExtensions
 
     private static IEnumerable<IComparison> GetDifferences<T>(Table table, IEnumerable<T> values)
     {
-        var comparer = new TableComparer<T>(table, values.ToArray());
+        var comparer = new TableComparer<T>();
 
-        return comparer.Compare().ToArray();
+        return comparer.Compare(table, values.ToArray()).ToArray();
     }
 }

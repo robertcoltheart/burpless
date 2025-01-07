@@ -1,4 +1,4 @@
-﻿namespace Burpless.Tables.Validation;
+﻿namespace Burpless.Tables.Comparison;
 
 internal enum ComparisonType
 {

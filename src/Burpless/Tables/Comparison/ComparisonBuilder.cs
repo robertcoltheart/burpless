@@ -1,30 +1,30 @@
 ﻿using System.Text;
 
-namespace Burpless.Tables.Validation;
+namespace Burpless.Tables.Comparison;
 
-internal class DifferenceBuilder
+internal class ComparisonBuilder
 {
     private IList<string> columnHeaders = [];
 
     private readonly List<Difference> differences = new();
 
-    public DifferenceBuilder AppendTableHeaders(IList<string> headers)
+    public ComparisonBuilder AppendTableHeaders(params IList<string> headers)
     {
         columnHeaders = headers;
 
         return this;
     }
 
-    public DifferenceBuilder AppendDifference(ComparisonType type, string column)
+    public ComparisonBuilder AppendColumnDifference(ComparisonType type, params string[] values)
     {
-        differences.Add(new Difference(type, [column]));
+        differences.Add(new Difference(type, ElementType.Column, values));
 
         return this;
     }
 
-    public DifferenceBuilder AppendDifference(ComparisonType type, string[] values)
+    public ComparisonBuilder AppendRowDifference(ComparisonType type, params string[] values)
     {
-        differences.Add(new Difference(type, values));
+        differences.Add(new Difference(type, ElementType.Row, values));
 
         return this;
     }
@@ -48,7 +48,7 @@ internal class DifferenceBuilder
         {
             var column = columnHeaders[i];
 
-            results.Append($" {column.PadLeft(columnWidths[i])} |");
+            results.Append($" {column.PadRight(columnWidths[i])} |");
         }
 
         results.AppendLine();
@@ -69,7 +69,7 @@ internal class DifferenceBuilder
 
             for (var i = 0; i < difference.Values.Length; i++)
             {
-                results.Append($" {difference.Values[i].PadLeft(columnWidths[i])} |");
+                results.Append($" {difference.Values[i].PadRight(columnWidths[i])} |");
             }
 
             results.AppendLine();
@@ -93,5 +93,5 @@ internal class DifferenceBuilder
         return widths;
     }
 
-    private record Difference(ComparisonType Type, string[] Values);
+    private record Difference(ComparisonType Type, ElementType Element, string[] Values);
 }

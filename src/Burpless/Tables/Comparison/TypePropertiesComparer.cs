@@ -1,13 +1,13 @@
 ﻿using System.Reflection;
 
-namespace Burpless.Tables.Validation;
+namespace Burpless.Tables.Comparison;
 
-internal class TypePropertiesComparer<T> : ITableComparer<T>
+internal class TypePropertiesComparer<T> : IComparer<Table, T[]>
 {
     private readonly Dictionary<string, PropertyInfo> properties = typeof(T).GetProperties()
         .ToDictionary(x => x.Name);
 
-    public IEnumerable<IComparison> GetComparisons(Table table, T[] items)
+    public IEnumerable<IComparison> Compare(Table table, T[] items)
     {
         var columns = table.Columns
             .Select(x => x.GetColumnName());

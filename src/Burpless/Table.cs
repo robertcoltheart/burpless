@@ -11,6 +11,8 @@ public class Table
 
     public IList<string?[]> Rows { get; } = [];
 
+    internal ITableValidatorExecutor? Executor { get; private set; }
+
     public static implicit operator Table(string value)
     {
         return Parse(value);
@@ -90,7 +92,8 @@ public class Table
 
         return new Table
         {
-            Columns = [..columns]
+            Columns = [..columns],
+            Executor = validator
         };
     }
 

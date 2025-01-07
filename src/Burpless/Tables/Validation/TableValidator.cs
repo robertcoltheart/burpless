@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Burpless.Tables.Comparison;
 
 namespace Burpless.Tables.Validation;
 
@@ -49,7 +50,7 @@ internal class TableValidator<T> : ITableValidator<T>, ITableValidatorExecutor
          + |        |      |      |
 
          */
-        var builder = new DifferenceBuilder();
+        var builder = new ComparisonBuilder();
 
         foreach (var item in items)
         {
@@ -61,5 +62,7 @@ internal class TableValidator<T> : ITableValidator<T>, ITableValidatorExecutor
                 }
             }
         }
+
+        return null;
     }
 }
