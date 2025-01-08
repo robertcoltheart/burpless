@@ -61,7 +61,7 @@ public static class TableExtensions
         var differences = GetDifferences(table, values)
             .ToArray();
 
-        VerifyColumns(differences);
+        VerifyColumns(typeof(T), differences);
         VerifyRows(table, differences);
     }
 
@@ -72,7 +72,7 @@ public static class TableExtensions
         return comparer.Compare(table, values.ToArray()).ToArray();
     }
 
-    private static void VerifyColumns(IComparison[] differences)
+    private static void VerifyColumns(Type type, IComparison[] differences)
     {
         var columnDifferences = differences
             .Where(x => x.Element == ElementType.Column && x.Type != ComparisonType.Match)
@@ -81,14 +81,14 @@ public static class TableExtensions
         if (columnDifferences.Any())
         {
             var results = new ComparisonBuilder()
-                .AppendTableHeaders("Missing properties");
+                .AppendTableHeaders($"<{type}>");
 
             foreach (var difference in columnDifferences)
             {
                 difference.Format(results);
             }
 
-            throw new TableValidationException(results.ToString());
+            throw new TableValidationException($"Missing columns in data type:{Environment.NewLine}{results}");
         }
     }
 
@@ -108,7 +108,7 @@ public static class TableExtensions
                 difference.Format(results);
             }
 
-            throw new TableValidationException(results.ToString());
+            throw new TableValidationException($"Mismatched table data:{Environment.NewLine}{results}");
         }
     }
 }
