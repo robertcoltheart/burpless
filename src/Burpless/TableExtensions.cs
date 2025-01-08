@@ -81,14 +81,14 @@ public static class TableExtensions
         if (columnDifferences.Any())
         {
             var results = new ComparisonBuilder()
-                .AppendTableHeaders("Missing");
+                .AppendTableHeaders("Missing properties");
 
             foreach (var difference in columnDifferences)
             {
                 difference.Format(results);
             }
 
-            throw new TableValidationException($"Missing properties in data:{Environment.NewLine}{results}");
+            throw new TableValidationException(results.ToString());
         }
     }
 
@@ -108,7 +108,7 @@ public static class TableExtensions
                 difference.Format(results);
             }
 
-            throw new TableValidationException($"Mismatched table with data:{Environment.NewLine}{results}");
+            throw new TableValidationException(results.ToString());
         }
     }
 }

@@ -49,7 +49,7 @@ public class WeatherForecastFeature
             """
             | TemperatureC | Summary  |
             | 25           | Freezing |
-            | 26           | Bracing  |
+            | 26           | Mild  |
             """))
         .And(x => x.TheFollowingDataIsReturned(Table.From(
             new Weather { TemperatureC = 25, Summary = "Freezing", Date = new DateOnly(2024, 12, 25), TemperatureF = 76 },

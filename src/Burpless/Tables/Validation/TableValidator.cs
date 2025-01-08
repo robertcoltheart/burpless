@@ -32,7 +32,7 @@ internal class TableValidator<T> : ITableValidator<T>, ITableValidatorExecutor
     {
         if (item is not T typedItem)
         {
-            throw new TableValidationException($"Mismatched table validation type, expected {typeof(T)}, got {item.GetType()}");
+            throw new TableValidationException($"Invalid validation data type, expected {typeof(T)}, got {item.GetType()}");
         }
 
         var conditions = Conditions
