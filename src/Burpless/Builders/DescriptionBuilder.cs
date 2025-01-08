@@ -27,11 +27,4 @@ public class DescriptionBuilder<TContext> : GivenWhenThenBuilder<TContext>
 
         return this;
     }
-
-    public DescriptionBuilder<TContext> Tags(params string[] tags)
-    {
-        Details.Tags = tags;
-
-        return this;
-    }
 }

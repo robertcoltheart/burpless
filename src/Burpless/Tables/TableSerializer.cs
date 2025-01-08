@@ -1,13 +1,11 @@
 ﻿using System.Collections.Concurrent;
 using System.Reflection;
 
-namespace Burpless;
+namespace Burpless.Tables;
 
 internal class TableSerializer
 {
-    private readonly ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>> Properties = new();
-
-    private readonly TableColumnFormatter formatter = new();
+    private readonly ConcurrentDictionary<Type, Dictionary<string, PropertyInfo>> typeProperties = new();
 
     public IEnumerable<T> Deserialize<T>(Table table)
         where T : new()
@@ -15,7 +13,7 @@ internal class TableSerializer
         return table.Rows.Select(x => Deserialize<T>(table.Columns, x));
     }
 
-    private T Deserialize<T>(IList<string> columns, string?[] row)
+    private T Deserialize<T>(IReadOnlyList<string> columns, string?[] row)
         where T : new()
     {
         var item = new T();
@@ -23,7 +21,7 @@ internal class TableSerializer
         var properties = GetProperties(typeof(T));
 
         var columnNames = columns
-            .Select(x => formatter.GetPropertyName(x))
+            .Select(x => x.GetColumnName())
             .ToArray();
 
         for (var i = 0; i < columnNames.Length; i++)
@@ -49,6 +47,6 @@ internal class TableSerializer
 
     private Dictionary<string, PropertyInfo> GetProperties(Type type)
     {
-        return Properties.GetOrAdd(type, x => x.GetProperties().ToDictionary(y => y.Name, StringComparer.OrdinalIgnoreCase));
+        return typeProperties.GetOrAdd(type, x => x.GetProperties().ToDictionary(y => y.Name, StringComparer.OrdinalIgnoreCase));
     }
 }

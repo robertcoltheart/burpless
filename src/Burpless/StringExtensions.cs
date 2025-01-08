@@ -42,4 +42,12 @@ internal static class StringExtensions
 
         return string.Join(" ", words);
     }
+
+    public static string GetColumnName(this string value)
+    {
+        return value
+            .Replace(" ", string.Empty)
+            .Replace("-", string.Empty)
+            .Replace("_", string.Empty);
+    }
 }

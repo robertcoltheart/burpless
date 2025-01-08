@@ -1,4 +1,4 @@
-﻿namespace Burpless;
+﻿namespace Burpless.Builders;
 
 internal static class ActionExtensions
 {
