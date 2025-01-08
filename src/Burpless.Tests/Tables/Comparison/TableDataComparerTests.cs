@@ -101,6 +101,33 @@ public class TableDataComparerTests
         }
     }
 
+    [Test]
+    public async Task MissingColumnReturnsEmptyValue()
+    {
+        var table = Table
+            .WithColumns("missing", "StringValue")
+            .AddRow("1", "value");
+
+        var model = new ClassWithProperties
+        {
+            IntValue = 1,
+            StringValue = "value",
+        };
+
+        var comparer = new TableDataComparer<ClassWithProperties>();
+        var builder = new ComparisonBuilder();
+
+        var results = comparer.Compare(table, [model]);
+
+        var match = results.FirstOrDefault(x => x.Type == ComparisonType.Missing);
+        match?.Format(builder);
+
+        var value = builder.ToString();
+
+        await Assert.That(match).IsNotNull();
+        await Assert.That(value).IsEqualTo("- | 1 | value |");
+    }
+
     private class ClassWithProperties
     {
         public int IntValue { get; set; }
