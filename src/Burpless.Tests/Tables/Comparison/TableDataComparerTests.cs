@@ -105,7 +105,7 @@ public class TableDataComparerTests
     {
         public int IntValue { get; set; }
 
-        public string StringValue { get; set; }
+        public string StringValue { get; set; } = null!;
 
         public bool BoolValue { get; set; }
     }
@@ -114,7 +114,7 @@ public class TableDataComparerTests
     {
         public int Id { get; set; }
 
-        public string String { get; set; }
+        public string String { get; set; } = null!;
 
         public DateTime? DateTime { get; set; }
     }

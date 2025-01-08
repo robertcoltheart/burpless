@@ -24,7 +24,7 @@ internal class HybridServiceProvider(IServiceProvider services) : IServiceProvid
             .Select(x => GetRequiredService(x.ParameterType))
             .ToArray();
 
-        return Activator.CreateInstance(type, parameters);
+        return Activator.CreateInstance(type, parameters)!;
     }
 
     private object GetRequiredService(Type serviceType)

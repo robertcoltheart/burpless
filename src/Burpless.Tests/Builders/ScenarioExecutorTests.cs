@@ -7,7 +7,7 @@ public class ScenarioExecutorTests
     [Test]
     public async Task DetailsNotNullByDefault()
     {
-        var executor = new ScenarioExecutor<object>();
+        var executor = new MockExecutor();
 
         await Assert.That(executor.Details).IsNotNull();
     }
@@ -15,7 +15,7 @@ public class ScenarioExecutorTests
     [Test]
     public async Task CanCastExecutorToTask()
     {
-        var executor = new ScenarioExecutor<object>();
+        var executor = new MockExecutor();
 
         Task value = executor;
 
@@ -25,8 +25,13 @@ public class ScenarioExecutorTests
     [Test]
     public async Task CanAwaitExecutor()
     {
-        var executor = new ScenarioExecutor<object>();
+        var executor = new MockExecutor();
 
         await executor;
+    }
+
+    private class MockExecutor : ScenarioExecutor<object>
+    {
+
     }
 }

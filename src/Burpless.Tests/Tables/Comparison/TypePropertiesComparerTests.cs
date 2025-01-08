@@ -25,7 +25,7 @@ public class TypePropertiesComparerTests
 
     private class PropertiesClass
     {
-        public string StringValue { get; set; }
+        public string StringValue { get; set; } = null!;
 
         public int IntValue { get; set; }
 

@@ -29,6 +29,6 @@ internal class ScenarioRunner<TContext>(IServiceProvider services, ScenarioDetai
 
     private object GetContext(Type contextType)
     {
-        return contexts.GetOrAdd(contextType, _ => services.GetService(contextType));
+        return contexts.GetOrAdd(contextType, _ => services.GetService(contextType)!);
     }
 }
