@@ -42,6 +42,11 @@ internal class ComparisonBuilder
 
     private void AddColumnHeaders(StringBuilder results, int[] columnWidths)
     {
+        if (columnHeaders.Count == 0)
+        {
+            return;
+        }
+
         results.Append("  |");
 
         for (var i = 0; i < columnHeaders.Count; i++)
@@ -78,9 +83,18 @@ internal class ComparisonBuilder
 
     private int[] GetColumnWidths()
     {
-        var widths = columnHeaders
-            .Select(x => x.Length)
-            .ToArray();
+        var maxRowLength = differences.Any()
+            ? differences.Max(x => x.Values.Length)
+            : 0;
+
+        var maxWidth = Math.Max(columnHeaders.Count, maxRowLength);
+
+        var widths = new int[maxWidth];
+
+        for (var i = 0; i < columnHeaders.Count; i++)
+        {
+            widths[i] = columnHeaders[i].Length;
+        }
 
         foreach (var row in differences)
         {

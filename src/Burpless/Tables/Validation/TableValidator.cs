@@ -5,8 +5,6 @@ namespace Burpless.Tables.Validation;
 internal class TableValidator<T> : ITableValidator<T>, ITableValidatorExecutor
     where T : new()
 {
-    public Type Type { get; } = typeof(T);
-
     public List<TableColumnCondition<T>> Conditions { get; } = new();
 
     public ITableValidator<T> WithColumn<TValue>(Expression<Func<T, TValue>> expression, Predicate<TValue> condition)
