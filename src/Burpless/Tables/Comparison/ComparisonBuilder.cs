@@ -4,7 +4,7 @@ namespace Burpless.Tables.Comparison;
 
 internal class ComparisonBuilder
 {
-    private IList<string> columnHeaders = [];
+    private IReadOnlyList<string> columnHeaders = [];
 
     private readonly List<Difference> differences = new();
 
@@ -15,16 +15,16 @@ internal class ComparisonBuilder
         return this;
     }
 
-    public ComparisonBuilder AppendColumnDifference(ComparisonType type, params string[] values)
+    public ComparisonBuilder AppendColumnDifference(ComparisonType type, params IEnumerable<string> values)
     {
-        differences.Add(new Difference(type, ElementType.Column, values));
+        differences.Add(new Difference(type, ElementType.Column, values.ToArray()));
 
         return this;
     }
 
-    public ComparisonBuilder AppendRowDifference(ComparisonType type, params string[] values)
+    public ComparisonBuilder AppendRowDifference(ComparisonType type, params IEnumerable<string> values)
     {
-        differences.Add(new Difference(type, ElementType.Row, values));
+        differences.Add(new Difference(type, ElementType.Row, values.ToArray()));
 
         return this;
     }

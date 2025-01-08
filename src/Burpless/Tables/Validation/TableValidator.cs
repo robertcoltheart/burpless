@@ -30,23 +30,6 @@ internal class TableValidator<T> : ITableValidator<T>, ITableValidatorExecutor
         return this;
     }
 
-    public bool IsValid(params object[] values)
-    {
-        var items = values.OfType<T>();
-
-        return items.All(row => Conditions.All(condition => condition.IsValid(row)));
-    }
-
-    public void Validate(params object[] values)
-    {
-        var items = values.OfType<T>();
-    }
-
-    public IEnumerable<string> GetColumns()
-    {
-        return Conditions.Select(x => x.ColumnName);
-    }
-
     public bool IsValid(string column, object item, out string value)
     {
         if (item is not T typedItem)

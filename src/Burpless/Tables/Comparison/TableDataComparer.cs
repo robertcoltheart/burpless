@@ -9,6 +9,11 @@ internal class TableDataComparer<T> : IComparer<Table, T[]>
 
     public IEnumerable<IComparison> Compare(Table table, T[] items)
     {
+        if (table.Validator != null)
+        {
+            yield break;
+        }
+
         var remaining = items.ToList();
 
         for (var i = 0; i < table.Rows.Count; i++)
