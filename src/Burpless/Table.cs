@@ -7,11 +7,15 @@ public class Table
 {
     private static readonly TableParser Parser = new();
 
-    public IList<string> Columns { get; private set; } = [];
+    private readonly List<string> columns = new();
 
-    public IList<string?[]> Rows { get; } = [];
+    private readonly List<string?[]> rows = new();
 
-    internal ITableValidatorExecutor? Executor { get; private set; }
+    public IReadOnlyList<string> Columns => columns.AsReadOnly();
+
+    public IReadOnlyList<string?[]> Rows => rows.AsReadOnly();
+
+    internal ITableValidatorExecutor? Validator { get; private set; }
 
     public static implicit operator Table(string value)
     {
@@ -75,10 +79,8 @@ public class Table
 
     public static Table WithColumns(params IEnumerable<string> columns)
     {
-        return new Table
-        {
-            Columns = [..columns]
-        };
+        return new Table()
+            .AddColumns(columns);
     }
 
     public static Table Validate<T>(Action<ITableValidator<T>> configure)
@@ -90,11 +92,17 @@ public class Table
         var columns = validator.Conditions
             .Select(x => x.ColumnName);
 
-        return new Table
-        {
-            Columns = [..columns],
-            Executor = validator
-        };
+        return new Table { Validator = validator }
+            .AddColumns(columns);
+    }
+
+    public Table AddColumns(params IEnumerable<string> columnNames)
+    {
+        VerifyValidator();
+
+        columns.AddRange(columnNames);
+
+        return this;
     }
 
     public Table AddRow(params string?[] values)
@@ -104,7 +112,9 @@ public class Table
 
     public Table AddRow(params IEnumerable<string?> values)
     {
-        Rows.Add(values.ToArray());
+        VerifyValidator();
+
+        rows.Add(values.ToArray());
 
         return this;
     }
@@ -116,12 +126,22 @@ public class Table
 
     public Table AddRow(params IEnumerable<object?> values)
     {
+        VerifyValidator();
+
         var stringValues = values
             .Select(x => x?.ToString())
             .ToArray();
 
-        Rows.Add(stringValues);
+        rows.Add(stringValues);
 
         return this;
+    }
+
+    private void VerifyValidator()
+    {
+        if (Validator != null)
+        {
+            throw new InvalidOperationException("Cannot add data when using table validation");
+        }
     }
 }

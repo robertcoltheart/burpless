@@ -8,9 +8,9 @@ internal class ComparisonBuilder
 
     private readonly List<Difference> differences = new();
 
-    public ComparisonBuilder AppendTableHeaders(params IList<string> headers)
+    public ComparisonBuilder AppendTableHeaders(params IEnumerable<string> headers)
     {
-        columnHeaders = headers;
+        columnHeaders = headers.ToList();
 
         return this;
     }

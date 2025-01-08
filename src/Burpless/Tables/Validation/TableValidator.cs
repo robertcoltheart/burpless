@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using Burpless.Tables.Comparison;
 
 namespace Burpless.Tables.Validation;
 
@@ -22,6 +21,7 @@ internal class TableValidator<T> : ITableValidator<T>, ITableValidatorExecutor
         var column = new TableColumnCondition<T>
         {
             ColumnName = columnName,
+            ValueParser = row => expression(row)?.ToString() ?? string.Empty,
             IsValid = row => condition(expression(row))
         };
 
@@ -42,27 +42,26 @@ internal class TableValidator<T> : ITableValidator<T>, ITableValidatorExecutor
         var items = values.OfType<T>();
     }
 
-    private IEnumerable<string> GetValidationErrors(IEnumerable<T> items)
+    public IEnumerable<string> GetColumns()
     {
-        /*
-           |   Col1 | Col2 | Col3 |
-         + | **a    |      |      |
-         + |        |      |      |
+        return Conditions.Select(x => x.ColumnName);
+    }
 
-         */
-        var builder = new ComparisonBuilder();
-
-        foreach (var item in items)
+    public bool IsValid(string column, object item, out string value)
+    {
+        if (item is not T typedItem)
         {
-            foreach (var condition in Conditions)
-            {
-                if (!condition.IsValid(item))
-                {
-
-                }
-            }
+            throw new TableValidationException($"Mismatched table validation type, expected {typeof(T)}, got {item.GetType()}");
         }
 
-        return null;
+        var conditions = Conditions
+            .Where(x => x.ColumnName == column.GetColumnName())
+            .ToArray();
+
+        value = conditions
+            .Select(x => x.ValueParser(typedItem))
+            .LastOrDefault() ?? string.Empty;
+
+        return conditions.All(x => x.IsValid(typedItem));
     }
 }

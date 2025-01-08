@@ -52,7 +52,7 @@ internal class TableDataComparer<T> : IComparer<Table, T[]>
         return -1;
     }
 
-    private bool Equivalent(T item, IList<string> columns, string?[] row)
+    private bool Equivalent(T item, IReadOnlyList<string> columns, string?[] row)
     {
         for (var i = 0; i < columns.Count; i++)
         {
