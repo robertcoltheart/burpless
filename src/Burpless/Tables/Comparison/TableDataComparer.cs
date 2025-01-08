@@ -35,8 +35,9 @@ internal class TableDataComparer<T> : IComparer<Table, T[]>
         foreach (var item in remaining)
         {
             var row = table.Columns
-                .Select(x => properties[x.GetColumnName()])
-                .Select(x => x.GetValue(item)?.ToString())
+                .Select(x => x.GetColumnName())
+                .Select(x => properties.GetValueOrDefault(x))
+                .Select(x => x?.GetValue(item)?.ToString())
                 .Select(x => x ?? string.Empty)
                 .ToArray();
 
@@ -62,7 +63,12 @@ internal class TableDataComparer<T> : IComparer<Table, T[]>
         for (var i = 0; i < columns.Count; i++)
         {
             var column = columns[i].GetColumnName();
-            var property = properties[column];
+            var property = properties.GetValueOrDefault(column);
+
+            if (property == null)
+            {
+                return false;
+            }
 
             if (!TypeParser.TryParse(property.PropertyType, row[i], out var rowValue))
             {

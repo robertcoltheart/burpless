@@ -58,4 +58,12 @@ public class WeatherForecastFeature
             .WithColumns("TemperatureC", "Summary")
             .AddRow("25", "Freezing")
             .AddRow("26", "Bracing")));
+
+    [Test]
+    public Task WithTableValidation() => Scenario.For<WeatherContext>()
+        .Feature(feature)
+        .When(x => x.TheWeatherForecastIsFetched())
+        .Then(x => x.TheFollowingDataIsReturned(Table.Validate<Weather>(validator => validator
+            .WithColumn(c => c.TemperatureC, c => c > 20)
+            .WithColumn(c => c.TemperatureF, c => c > 70))));
 }
