@@ -42,7 +42,7 @@ internal class SimpleServiceProvider : IServiceProvider
             .Select(x => Resolve(x.ParameterType, created, activating))
             .ToArray();
 
-        return Activator.CreateInstance(type, parameters);
+        return Activator.CreateInstance(type, parameters)!;
     }
 
     private void ValidateResolution(Type type, Stack<Type> activating)

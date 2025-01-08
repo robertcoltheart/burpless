@@ -105,7 +105,7 @@ public class TableExtensionsTests
 
     private class PropertyClass
     {
-        public string StringColumn { get; set; }
+        public string StringColumn { get; set; } = null!;
 
         public int IntColumn { get; set; }
 

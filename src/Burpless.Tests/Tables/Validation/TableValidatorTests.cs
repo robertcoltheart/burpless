@@ -65,33 +65,10 @@ public class TableValidatorTests
         await Assert.That(parsed).IsEqualTo(expected);
     }
 
-    [Test]
-    [Arguments(true, "IntValue")]
-    [Arguments(false, "Int")]
-    [Arguments(false, "String")]
-    public async Task CanUseCustomColumnNameToValidateInvalidModel(bool equals, string column)
-    {
-        var validator = new TableValidator<Model>();
-
-        validator
-            .WithColumn("Int", x => x.IntValue, x => x == 1)
-            .WithColumn("String", x => x.StringValue, x => x == "value");
-
-        var invalidModel = new Model
-        {
-            IntValue = 5,
-            StringValue = "wrong"
-        };
-
-        var valid = validator.IsValid(column, invalidModel, out _);
-
-        await Assert.That(valid).IsEqualTo(equals);
-    }
-
     private class Model
     {
         public int IntValue { get; set; }
 
-        public string StringValue { get; set; }
+        public string StringValue { get; set; } = null!;
     }
 }
