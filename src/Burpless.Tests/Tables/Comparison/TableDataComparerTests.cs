@@ -111,7 +111,7 @@ public class TableDataComparerTests
         var model = new ClassWithProperties
         {
             IntValue = 1,
-            StringValue = "value",
+            StringValue = "wrong",
         };
 
         var comparer = new TableDataComparer<ClassWithProperties>();
