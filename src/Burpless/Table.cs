@@ -92,8 +92,11 @@ public class Table
         var columns = validator.Conditions
             .Select(x => x.ColumnName);
 
-        return new Table { Validator = validator }
-            .AddColumns(columns);
+        var table = WithColumns(columns);
+
+        table.Validator = validator;
+
+        return table;
     }
 
     public Table AddColumns(params IEnumerable<string> columnNames)

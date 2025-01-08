@@ -45,7 +45,7 @@ public static class TableExtensions
     private static void VerifyColumns(IComparison[] differences)
     {
         var columnDifferences = differences
-            .Where(x => x.Element == ElementType.Column)
+            .Where(x => x.Element == ElementType.Column && x.Type != ComparisonType.Match)
             .ToArray();
 
         if (columnDifferences.Any())
@@ -68,7 +68,7 @@ public static class TableExtensions
             .Where(x => x.Element == ElementType.Row)
             .ToArray();
 
-        if (rowDifferences.Any())
+        if (rowDifferences.Any(x => x.Type != ComparisonType.Match))
         {
             var results = new ComparisonBuilder()
                 .AppendTableHeaders(table.Columns);

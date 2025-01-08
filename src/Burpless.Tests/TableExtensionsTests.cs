@@ -86,10 +86,21 @@ public class TableExtensionsTests
     }
 
     [Test]
-    public async Task CanCompareTableWithValidator()
+    [Arguments(true, "value")]
+    [Arguments(false, "wrong value")]
+    public async Task CanCompareTableWithValidator(bool equal, string matchValue)
     {
-        Table.Validate<PropertyClass>(validator => validator
-            .WithColumn(x => x.StringColumn, x => x == "value"));
+        var table = Table.Validate<PropertyClass>(validator => validator
+            .WithColumn(x => x.StringColumn, x => x == matchValue));
+
+        var data = new PropertyClass
+        {
+            StringColumn = "value"
+        };
+
+        var result = table.AreEqual(data);
+
+        await Assert.That(result).IsEqualTo(equal);
     }
 
     private class PropertyClass
