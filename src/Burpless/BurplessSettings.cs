@@ -5,17 +5,17 @@ namespace Burpless;
 /// <summary>
 /// Provides a mechanism for global configuration to be set.
 /// </summary>
-public class TestSettings
+public class BurplessSettings
 {
     internal IServiceProvider Services { get; private set; } = new SimpleServiceProvider();
 
-    internal static TestSettings Instance { get; } = new();
+    internal static BurplessSettings Instance { get; } = new();
 
     /// <summary>
     /// Sets the global configuration values.
     /// </summary>
-    /// <param name="action">A delegate for configuring the <see cref="TestSettings"/>.</param>
-    public static void Configure(Action<TestSettings> action)
+    /// <param name="action">A delegate for configuring the <see cref="BurplessSettings"/>.</param>
+    public static void Configure(Action<BurplessSettings> action)
     {
         action(Instance);
     }
@@ -25,7 +25,7 @@ public class TestSettings
     /// </summary>
     /// <param name="provider">The service provider to use when resolving contexts and their injected services.</param>
     /// <returns>The configuration.</returns>
-    public TestSettings UseServiceProvider(IServiceProvider provider)
+    public BurplessSettings UseServiceProvider(IServiceProvider provider)
     {
         Services = new HybridServiceProvider(provider);
 

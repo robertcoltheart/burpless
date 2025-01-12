@@ -24,6 +24,6 @@ internal class ApplicationFactory : WebApplicationFactory<Program>
         instance = new ApplicationFactory();
 
         // Let Burpless resolve context dependencies using the services from the ASP.NET Core application
-        TestSettings.Configure(configuration => configuration.UseServiceProvider(instance.Services));
+        BurplessSettings.Configure(configuration => configuration.UseServiceProvider(instance.Services));
     }
 }

@@ -43,7 +43,7 @@ public abstract class ScenarioExecutor<TContext>
 
     private Task ExecuteAsync()
     {
-        var runner = new ScenarioRunner<TContext>(TestSettings.Instance.Services, Details);
+        var runner = new ScenarioRunner<TContext>(BurplessSettings.Instance.Services, Details);
 
         return runner.Execute();
     }
