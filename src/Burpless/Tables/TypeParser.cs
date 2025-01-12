@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Globalization;
 using System.Numerics;
 using System.Reflection;
 
@@ -7,6 +8,8 @@ namespace Burpless.Tables;
 internal static class TypeParser
 {
     private static readonly ConcurrentDictionary<Type, MethodInfo?> ParseMethods = new();
+
+    private static readonly ConcurrentDictionary<Type, MethodInfo?> CustomParseMethods = new();
 
     private static readonly HashSet<Type> ParseableTypes =
     [
@@ -46,6 +49,11 @@ internal static class TypeParser
             return TryParseExact(type, value, out parsed);
         }
 
+        if (BurplessSettings.Instance.CustomParsers.ContainsKey(type))
+        {
+            return TryParseCustom(type, value, out parsed);
+        }
+
         var isParsable = type
             .GetInterfaces()
             .Any(c => c.IsGenericType && c.GetGenericTypeDefinition() == typeof(IParsable<>));
@@ -58,12 +66,13 @@ internal static class TypeParser
             {
                 try
                 {
-                    parsed = parse.Invoke(null, [value, null])!;
+                    parsed = parse.Invoke(null, [value, CultureInfo.CurrentCulture])!;
 
                     return true;
                 }
-                catch (TargetInvocationException ex) when (ex.InnerException is FormatException)
+                catch
                 {
+                    parsed = null!;
                 }
             }
         }
@@ -98,7 +107,7 @@ internal static class TypeParser
         });
     }
 
-    public static bool TryParseExact(Type type, string? value, out object parsed)
+    private static bool TryParseExact(Type type, string? value, out object parsed)
     {
         return type switch
         {
@@ -131,10 +140,31 @@ internal static class TypeParser
         };
     }
 
+    private static bool TryParseCustom(Type type, string? value, out object parsed)
+    {
+        var parser = BurplessSettings.Instance.CustomParsers[type];
+
+        var method = CustomParseMethods.GetOrAdd(parser.GetType(),
+            parserType => parserType.GetMethod("Parse", [typeof(string), typeof(IFormatProvider)]));
+
+        try
+        {
+            parsed = method!.Invoke(null, [value, null])!;
+
+            return true;
+        }
+        catch
+        {
+            parsed = null!;
+        }
+
+        return false;
+    }
+
     private static bool TryParse<T>(string? value, out object parsed)
         where T : IParsable<T>
     {
-        if (T.TryParse(value, null, out var result))
+        if (T.TryParse(value, CultureInfo.CurrentCulture, out var result))
         {
             parsed = result;
 

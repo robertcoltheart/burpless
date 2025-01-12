@@ -1,4 +1,6 @@
-﻿using Burpless.Services;
+﻿using System.Collections.Concurrent;
+using Burpless.Services;
+using Burpless.Tables;
 
 namespace Burpless;
 
@@ -8,6 +10,8 @@ namespace Burpless;
 public class BurplessSettings
 {
     internal IServiceProvider Services { get; private set; } = new SimpleServiceProvider();
+
+    internal ConcurrentDictionary<Type, object> CustomParsers { get; } = new();
 
     internal static BurplessSettings Instance { get; } = new();
 
@@ -28,6 +32,19 @@ public class BurplessSettings
     public BurplessSettings UseServiceProvider(IServiceProvider provider)
     {
         Services = new HybridServiceProvider(provider);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Adds a custom type parser when parsing <see cref="Table"/> values from string to a typed value.
+    /// </summary>
+    /// <typeparam name="T">The type of the value.</typeparam>
+    /// <param name="parser">The parser instance to use when parsing from string to a typed value.</param>
+    /// <returns>The configuration.</returns>
+    public BurplessSettings AddCustomParser<T>(IParser<T> parser)
+    {
+        CustomParsers.AddOrUpdate(typeof(T), parser, (_, _) => parser);
 
         return this;
     }
