@@ -57,6 +57,28 @@ public class GivenWhenThenBuilder<TContext> : ScenarioExecutor<TContext>
         return ContinueWith();
     }
 
+    public ContinuationBuilder<TContext> Given<TAdditionalContext>(Expression<Action<TAdditionalContext>> action)
+    {
+        return Given(action.GetName(), action.Compile());
+    }
+
+    public ContinuationBuilder<TContext> Given<TAdditionalContext>(Expression<Func<TAdditionalContext, Task>> action)
+    {
+        return Given(action.GetName(), action.Compile());
+    }
+
+    public ContinuationBuilder<TContext> Given<TAdditionalContext>(string step, Action<TAdditionalContext> action)
+    {
+        return Given(step, action.ToAsync());
+    }
+
+    public ContinuationBuilder<TContext> Given<TAdditionalContext>(string step, Func<TAdditionalContext, Task> action)
+    {
+        AddStep(step, StepType.Given, action);
+
+        return ContinueWith();
+    }
+
     /// <summary>
     /// Adds a 'when' step to the scenario.
     /// </summary>

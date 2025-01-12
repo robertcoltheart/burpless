@@ -20,10 +20,10 @@ public class ScenarioRunnerTests
     [Test]
     public async Task CanRunGivenStep()
     {
-        var details = new ScenarioDetails<Context>();
+        var details = new ScenarioDetails();
         details.Steps.Add(new ScenarioStep<Context>("Given", StepType.Given, c => c.Call()));
 
-        var runner = new ScenarioRunner<Context>(services, details);
+        var runner = new ScenarioRunner(services, details);
         await runner.Execute();
 
         await Assert.That(context.Called).IsEqualTo(1);
@@ -32,10 +32,10 @@ public class ScenarioRunnerTests
     [Test]
     public async Task CanRunWhenStep()
     {
-        var details = new ScenarioDetails<Context>();
+        var details = new ScenarioDetails();
         details.Steps.Add(new ScenarioStep<Context>("When", StepType.When, c => c.Call()));
 
-        var runner = new ScenarioRunner<Context>(services, details);
+        var runner = new ScenarioRunner(services, details);
         await runner.Execute();
 
         await Assert.That(context.Called).IsEqualTo(1);
@@ -44,10 +44,10 @@ public class ScenarioRunnerTests
     [Test]
     public async Task CanRunThenStep()
     {
-        var details = new ScenarioDetails<Context>();
+        var details = new ScenarioDetails();
         details.Steps.Add(new ScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
 
-        var runner = new ScenarioRunner<Context>(services, details);
+        var runner = new ScenarioRunner(services, details);
         await runner.Execute();
 
         await Assert.That(context.Called).IsEqualTo(1);
@@ -56,12 +56,12 @@ public class ScenarioRunnerTests
     [Test]
     public async Task CanRunFeatureAndStepsWithSameContext()
     {
-        var details = new ScenarioDetails<Context>();
+        var details = new ScenarioDetails();
         details.Feature = Feature.Named("Feature")
             .WithBackground<Context>(x => x.Given(c => c.Call()));
         details.Steps.Add(new ScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
 
-        var runner = new ScenarioRunner<Context>(services, details);
+        var runner = new ScenarioRunner(services, details);
         await runner.Execute();
 
         await Assert.That(context.Called).IsEqualTo(2);
@@ -71,12 +71,12 @@ public class ScenarioRunnerTests
     [Test]
     public async Task CanRunFeatureAndStepsWithDifferentContexts()
     {
-        var details = new ScenarioDetails<Context>();
+        var details = new ScenarioDetails();
         details.Feature = Feature.Named("Feature")
             .WithBackground<FeatureContext>(x => x.Given(c => c.Call()));
         details.Steps.Add(new ScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
 
-        var runner = new ScenarioRunner<Context>(services, details);
+        var runner = new ScenarioRunner(services, details);
         await runner.Execute();
 
         await Assert.That(context.Called).IsEqualTo(1);
@@ -89,11 +89,11 @@ public class ScenarioRunnerTests
     [Test]
     public async Task IgnoresFeatureWithNoBackground()
     {
-        var details = new ScenarioDetails<Context>();
+        var details = new ScenarioDetails();
         details.Feature = Feature.Named("Feature");
         details.Steps.Add(new ScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
 
-        var runner = new ScenarioRunner<Context>(services, details);
+        var runner = new ScenarioRunner(services, details);
         await runner.Execute();
 
         await Assert.That(context.Called).IsEqualTo(1);

@@ -1,6 +1,6 @@
 ﻿namespace Burpless;
 
-internal class ScenarioDetails<TContext>
+internal class ScenarioDetails
 {
     public string? Name { get; set; }
 
@@ -10,5 +10,5 @@ internal class ScenarioDetails<TContext>
 
     public Feature? Feature { get; set; }
 
-    public List<ScenarioStep<TContext>> Steps { get; } = [];
+    public List<IScenarioStep> Steps { get; } = [];
 }
