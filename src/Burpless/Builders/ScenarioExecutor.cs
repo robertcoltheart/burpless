@@ -14,7 +14,7 @@ public abstract class ScenarioExecutor<TContext>
     {
     }
 
-    internal ScenarioDetails<TContext> Details { get; set; } = new();
+    internal ScenarioDetails Details { get; set; } = new();
 
     /// <summary>
     /// Defines an implicit conversion of a <see cref="ScenarioExecutor{TContext}"/> to a <see cref="Task"/>.
@@ -34,16 +34,17 @@ public abstract class ScenarioExecutor<TContext>
         return ExecuteAsync().GetAwaiter();
     }
 
-    internal void AddStep(string name, StepType type, Func<TContext, Task> action)
+    internal void AddStep<T>(string name, StepType type, Func<T, Task> action)
+        where T : class
     {
-        var scenarioStep = new ScenarioStep<TContext>(name, type, action);
+        var scenarioStep = new ScenarioStep<T>(name, type, action);
 
         Details.Steps.Add(scenarioStep);
     }
 
     private Task ExecuteAsync()
     {
-        var runner = new ScenarioRunner<TContext>(BurplessSettings.Instance.Services, Details);
+        var runner = new ScenarioRunner(BurplessSettings.Instance.Services, Details);
 
         return runner.Execute();
     }

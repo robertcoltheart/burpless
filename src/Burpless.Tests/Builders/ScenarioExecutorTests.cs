@@ -32,6 +32,5 @@ public class ScenarioExecutorTests
 
     private class MockExecutor : ScenarioExecutor<object>
     {
-
     }
 }

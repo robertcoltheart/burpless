@@ -2,7 +2,7 @@
 
 namespace Burpless.Example.WebApi.Tests.Contexts;
 
-public class WeatherContext(IWebApiClient client) : ServerContext
+public class WeatherContext(IWebApiClient client)
 {
     private Weather[]? weather;
 

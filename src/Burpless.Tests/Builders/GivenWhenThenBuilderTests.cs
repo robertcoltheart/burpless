@@ -174,7 +174,61 @@ public class GivenWhenThenBuilderTests
         await Assert.That(step?.Type).IsEqualTo(StepType.Then);
     }
 
-    private class Context
+    [Test]
+    [Arguments("WorkAsync", typeof(Context))]
+    [Arguments("Something", typeof(AnotherContext))]
+    [Arguments("SomethingElse", typeof(AnotherContext))]
+    public async Task GiveStepsAddAdditionalContexts(string name, Type type)
+    {
+        var builder = new GivenWhenThenBuilder<Context>()
+            .Given(x => x.WorkAsync())
+            .Given<AnotherContext>(x => x.Something())
+            .And<AnotherContext>(x => x.SomethingElse());
+
+        var step = builder.Details.Steps.FirstOrDefault(x => x.Name == name);
+
+        await Assert.That(step).IsNotNull();
+        await Assert.That(step?.Type).IsEqualTo(StepType.Given);
+        await Assert.That(step?.ContextType).IsEqualTo(type);
+    }
+
+    [Test]
+    [Arguments("WorkAsync", typeof(Context))]
+    [Arguments("Something", typeof(AnotherContext))]
+    [Arguments("SomethingElse", typeof(AnotherContext))]
+    public async Task WhenStepsAddAdditionalContexts(string name, Type type)
+    {
+        var builder = new GivenWhenThenBuilder<Context>()
+            .When(x => x.WorkAsync())
+            .When<AnotherContext>(x => x.Something())
+            .And<AnotherContext>(x => x.SomethingElse());
+
+        var step = builder.Details.Steps.FirstOrDefault(x => x.Name == name);
+
+        await Assert.That(step).IsNotNull();
+        await Assert.That(step?.Type).IsEqualTo(StepType.When);
+        await Assert.That(step?.ContextType).IsEqualTo(type);
+    }
+
+    [Test]
+    [Arguments("WorkAsync", typeof(Context))]
+    [Arguments("Something", typeof(AnotherContext))]
+    [Arguments("SomethingElse", typeof(AnotherContext))]
+    public async Task ThenStepsAddAdditionalContexts(string name, Type type)
+    {
+        var builder = new GivenWhenThenBuilder<Context>()
+            .Then(x => x.WorkAsync())
+            .Then<AnotherContext>(x => x.Something())
+            .And<AnotherContext>(x => x.SomethingElse());
+
+        var step = builder.Details.Steps.FirstOrDefault(x => x.Name == name);
+
+        await Assert.That(step).IsNotNull();
+        await Assert.That(step?.Type).IsEqualTo(StepType.Then);
+        await Assert.That(step?.ContextType).IsEqualTo(type);
+    }
+
+    public class Context
     {
         public void Dummy()
         {
@@ -185,6 +239,18 @@ public class GivenWhenThenBuilderTests
         }
 
         public Task WorkAsync()
+        {
+            return Task.CompletedTask;
+        }
+    }
+
+    public class AnotherContext
+    {
+        public void Something()
+        {
+        }
+
+        public Task SomethingElse()
         {
             return Task.CompletedTask;
         }

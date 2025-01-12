@@ -12,7 +12,7 @@ public class WeatherForecastFeature
 
             We can add more descriptive text here as a raw string.
             """)
-        .WithBackground<WeatherContext>(background => background
+        .WithBackground<ServerContext>(background => background
             .Given(x => x.TheServerIsRunning()));
 
     [Test]
@@ -31,14 +31,14 @@ public class WeatherForecastFeature
         .Given(x => x.TheClientTimeoutIs(TimeSpan.FromSeconds(10)))
         .When(x => x.TheWeatherForecastIsFetched())
         .Then(x => x.ThereShouldBeValidWeatherData())
-        .And(x => x.TheServerShouldStillBeRunning())
+        .And<ServerContext>(x => x.TheServerShouldStillBeRunning())
         .And(x => x.NoErrorsWereEncountered());
 
     [Test]
     public Task InvalidRouteIsCaught() => Scenario.For<WeatherContext>()
         .Feature(feature)
         .When(x => x.AnInvalidRouteIsCalled())
-        .Then(x => x.TheServerIsRunning())
+        .Then<ServerContext>(x => x.TheServerIsRunning())
         .And(x => x.AnExceptionWasThrown());
 
     [Test]
