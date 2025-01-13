@@ -61,7 +61,7 @@ public class ScenarioRunnerTests
     {
         var details = new ScenarioDetails();
         details.Feature = Feature.Named("Feature")
-            .WithBackground<Context>(x => x.Given(c => c.Call()));
+            .Background<Context>(x => x.Given(c => c.Call()));
         details.Steps.Add(new ScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
 
         var runner = new ScenarioRunner(services, details);
@@ -76,7 +76,7 @@ public class ScenarioRunnerTests
     {
         var details = new ScenarioDetails();
         details.Feature = Feature.Named("Feature")
-            .WithBackground<FeatureContext>(x => x.Given(c => c.Call()));
+            .Background<FeatureContext>(x => x.Given(c => c.Call()));
         details.Steps.Add(new ScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
 
         var runner = new ScenarioRunner(services, details);

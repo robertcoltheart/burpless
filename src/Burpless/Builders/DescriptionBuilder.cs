@@ -16,7 +16,7 @@ public class DescriptionBuilder<TContext> : GivenWhenThenBuilder<TContext>
     /// </summary>
     /// <param name="name">The specified name of the scenario.</param>
     /// <returns>The scenario builder.</returns>
-    public DescriptionBuilder<TContext> Name(string name)
+    public DescriptionBuilder<TContext> Named(string name)
     {
         Details.Name = name;
 
@@ -28,7 +28,7 @@ public class DescriptionBuilder<TContext> : GivenWhenThenBuilder<TContext>
     /// </summary>
     /// <param name="description">The specified description of the scenario.</param>
     /// <returns>The scenario builder.</returns>
-    public DescriptionBuilder<TContext> Description(string description)
+    public DescriptionBuilder<TContext> DescribedBy(string description)
     {
         Details.Description = description;
 
@@ -40,7 +40,7 @@ public class DescriptionBuilder<TContext> : GivenWhenThenBuilder<TContext>
     /// </summary>
     /// <param name="tags">The specified tags of the scenario.</param>
     /// <returns>The scenario builder.</returns>
-    public DescriptionBuilder<TContext> Tags(params IEnumerable<string> tags)
+    public DescriptionBuilder<TContext> WithTags(params IEnumerable<string> tags)
     {
         Details.Tags = tags.ToArray();
 

@@ -14,7 +14,7 @@ public class FeatureTests
     public async Task FeatureContainsDescription()
     {
         var feature = Feature.Named("name")
-            .WithDescription("my description");
+            .DescribedBy("my description");
 
         await Assert.That(feature.Description).IsEqualTo("my description");
     }
@@ -33,7 +33,7 @@ public class FeatureTests
     public async Task CanCreateStepsInFeature()
     {
         var feature = Feature.Named("name")
-            .WithBackground<Context>(background => background
+            .Background<Context>(background => background
                 .Given(x => x.Given()));
 
         await Assert.That(feature.Steps).IsNotEmpty();
@@ -43,7 +43,7 @@ public class FeatureTests
     public async Task CanCreateNamedStepInFeature()
     {
         var feature = Feature.Named("name")
-            .WithBackground<Context>(background => background
+            .Background<Context>(background => background
                 .Given("some action", x => x.Given()));
 
         await Assert.That(feature.Steps).IsNotEmpty();

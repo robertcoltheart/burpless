@@ -6,20 +6,20 @@ namespace Burpless.Example.WebApi.Tests.Features;
 public class WeatherForecastFeature
 {
     private readonly Feature feature = Feature.Named("Weather forecast")
-        .WithDescription(
+        .DescribedBy(
             """
             Various tests against the weather forecast endpoint.
 
             We can add more descriptive text here as a raw string.
             """)
-        .WithBackground<ServerContext>(background => background
+        .Background<ServerContext>(background => background
             .Given(x => x.TheServerIsRunning()));
 
     [Test]
     public Task WeatherForecastCanBeFetched() => Scenario.For<WeatherContext>()
-        .Feature(feature)
-        .Name("Weather forecast is fetched")
-        .Description("When the server is running, it should allow calls that will return weather forecasts")
+        .ForFeature(feature)
+        .Named("Weather forecast is fetched")
+        .DescribedBy("When the server is running, it should allow calls that will return weather forecasts")
         .When(x => x.TheWeatherForecastIsFetched())
         .Then(x => x.ThereShouldBeValidWeatherData())
         .And(x => x.MoreThanOneForecastExists())
@@ -27,7 +27,7 @@ public class WeatherForecastFeature
 
     [Test]
     public Task WeatherForecastIsFetchedWhenServerIsRunning() => Scenario.For<WeatherContext>()
-        .Feature(feature)
+        .ForFeature(feature)
         .Given(x => x.TheClientTimeoutIs(TimeSpan.FromSeconds(10)))
         .When(x => x.TheWeatherForecastIsFetched())
         .Then(x => x.ThereShouldBeValidWeatherData())
@@ -36,14 +36,14 @@ public class WeatherForecastFeature
 
     [Test]
     public Task InvalidRouteIsCaught() => Scenario.For<WeatherContext>()
-        .Feature(feature)
+        .ForFeature(feature)
         .When(x => x.AnInvalidRouteIsCalled())
         .Then<ServerContext>(x => x.TheServerIsRunning())
         .And(x => x.AnExceptionWasThrown());
 
     [Test]
     public Task WithTableData() => Scenario.For<WeatherContext>()
-        .Feature(feature)
+        .ForFeature(feature)
         .When(x => x.TheWeatherForecastIsFetched())
         .Then(x => x.TheFollowingDataIsReturned(
             """
@@ -61,7 +61,7 @@ public class WeatherForecastFeature
 
     [Test]
     public Task WithTableValidation() => Scenario.For<WeatherContext>()
-        .Feature(feature)
+        .ForFeature(feature)
         .When(x => x.TheWeatherForecastIsFetched())
         .Then(x => x.TheFollowingDataIsReturned(Table.Validate<Weather>(validator => validator
             .WithColumn(c => c.TemperatureC, c => c > 20)

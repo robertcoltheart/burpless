@@ -17,7 +17,7 @@ public class ScenarioGroupingBuilder<TContext> : DescriptionBuilder<TContext>
     /// </summary>
     /// <param name="feature">The feature that the scenario belongs to.</param>
     /// <returns>The scenario builder.</returns>
-    public DescriptionBuilder<TContext> Feature(Feature feature)
+    public DescriptionBuilder<TContext> ForFeature(Feature feature)
     {
         Details.Feature = feature;
 
