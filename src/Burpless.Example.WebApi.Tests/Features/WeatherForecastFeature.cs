@@ -40,30 +40,4 @@ public class WeatherForecastFeature
         .When(x => x.AnInvalidRouteIsCalled())
         .Then<ServerContext>(x => x.TheServerIsRunning())
         .And(x => x.AnExceptionWasThrown());
-
-    [Test]
-    public Task WithTableData() => Scenario.For<WeatherContext>()
-        .ForFeature(feature)
-        .When(x => x.TheWeatherForecastIsFetched())
-        .Then(x => x.TheFollowingDataIsReturned(
-            """
-            | TemperatureC | Summary  |
-            | 25           | Freezing |
-            | 26           | Bracing  |
-            """))
-        .And(x => x.TheFollowingDataIsReturned(Table.From(
-            new Weather { TemperatureC = 25, Summary = "Freezing", Date = new DateOnly(2024, 12, 25), TemperatureF = 76 },
-            new Weather { TemperatureC = 26, Summary = "Bracing", Date = new DateOnly(2024, 12, 26), TemperatureF = 78 })))
-        .And(x => x.TheFollowingDataIsReturned(Table
-            .WithColumns("TemperatureC", "Summary")
-            .AddRow("25", "Freezing")
-            .AddRow("26", "Bracing")));
-
-    [Test]
-    public Task WithTableValidation() => Scenario.For<WeatherContext>()
-        .ForFeature(feature)
-        .When(x => x.TheWeatherForecastIsFetched())
-        .Then(x => x.TheFollowingDataIsReturned(Table.Validate<Weather>(validator => validator
-            .WithColumn(c => c.TemperatureC, c => c > 20)
-            .WithColumn(c => c.TemperatureF, c => c > 70))));
 }

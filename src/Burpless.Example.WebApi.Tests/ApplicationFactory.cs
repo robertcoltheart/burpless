@@ -6,24 +6,23 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Burpless.Example.WebApi.Tests;
 
-internal class ApplicationFactory : WebApplicationFactory<Program>
+public class ApplicationFactory : WebApplicationFactory<Program>
 {
-    private static ApplicationFactory? instance;
-
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
-    {
-        builder
-            .UseEnvironment("Integration")
-            .ConfigureTestServices(services => services
-                .AddSingleton<IWebApiClient>(_ => new WebApiClient(CreateDefaultClient())));
-    }
+    private static ApplicationFactory? factory;
 
     [Before(TestSession)]
     public static void BeforeTest()
     {
-        instance = new ApplicationFactory();
+        factory = new ApplicationFactory();
 
         // Let Burpless resolve context dependencies using the services from the ASP.NET Core application
-        BurplessSettings.Configure(configuration => configuration.UseServiceProvider(instance.Services));
+        BurplessSettings.Configure(x => x.UseServiceProvider(factory.Services));
+    }
+
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        builder.ConfigureTestServices(services => services
+            .AddSingleton(this)
+            .AddSingleton<IWebApiClient>(x => new WebApiClient(CreateClient())));
     }
 }

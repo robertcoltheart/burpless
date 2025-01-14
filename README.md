@@ -2,13 +2,10 @@
 
 [![NuGet](https://img.shields.io/nuget/v/Burpless?style=for-the-badge)](https://www.nuget.org/packages/Burpless) [![License](https://img.shields.io/github/license/robertcoltheart/Burpless?style=for-the-badge)](https://github.com/robertcoltheart/Burpless/blob/master/LICENSE)
 
-Burpless is a behavior-driven development (BDD) framework that can be used to construct and execute features and scenarios.
+Burpless is a behavior-driven development (BDD) framework that can be used to fluently construct and execute features and scenarios.
 
-The framework tests broadly adhere to Gherkin syntax, so if you are used to writing Gherkin, you'll feel at home.
-Burpless is framework-agnostic, and you can plug in the test framework of your choice. Examples are given below for the
-major frameworks.
-
-In addition, living documentation can also be generated from your test runs, if desired.
+The scenarios written using Burpless roughly follow the Gherkin syntax, so if you are used to writing Gherkin, you'll feel right at home.
+Burpless is also framework-agnostic, and you can plug in the test framework of your choice.
 
 See more on the philosophy behind Burpless [here](#philosophy).
 
@@ -31,24 +28,28 @@ public class WeatherFeature
 
 Note that your test should return `Task`. You can also `async/await` the scenario if you wish.
 
-All scenarios have a context which is the code that actually executes the steps. An example from above is given:
+All scenarios have a context which is the code that actually executes the steps. The context for a weather forecast service is given:
 
 ```csharp
 public class WeatherContext
 {
+    private string? weather;
+
     public void TheWeatherServerIsRunning()
     {
-        // do the server setup step
+        // do some server setup
     }
 
-    public void TheWeatherIsFetched()
+    public async Task TheWeatherIsFetched()
     {
         // fetch weather from the API
+        weather = await client.GetStringAsync("/weatherforecast");
     }
 
     public void WeatherDataShouldBeReturned()
     {
         // assert that data was returned from the API
+        Assert.IsNotNull(weather);
     }
 }
 ```
@@ -57,7 +58,7 @@ During the test run, a new context is created for each scenario, so if you want 
 field in your context. For example, storing the output of an API call or catching an exception.
 
 ### Features and metadata
-As with Gherkin, you can add more information about your feature or scenario, as well as provide some background steps that should
+As with Gherkin, you can add readable details to your feature or scenario, as well as provide some background steps that should
 be run for each of your scenarios.
 
 Construct a feature in your test class and link it to your scenarios as below:
@@ -85,6 +86,18 @@ public class WeatherFeature
 
 The feature background steps are run before each of your scenarios. It is best practice to
 group your scenarios with a feature in a single code file, much like Gherkin.
+
+You are free to give more descriptive names to your steps as well, as below:
+
+```csharp
+public class WeatherFeature
+{
+    [Fact]
+    public Task FetchesTheWeatherForecasts() => Scenario.For<WeatherContext>()
+        .When("the weather is fetched from the server", x => x.FetchWeather())
+        .Then("there should be no exceptions", x => x.VerifyExceptions());
+}
+```
 
 ### Scenario outlines
 If you are wanting to run the same scenario with different input parameters, you can simply use the arguments of your
@@ -117,8 +130,8 @@ You can configure your container using the [configuration options](#configuratio
 To encourage code re-use, you can split your steps into different contexts. There is no limit on the number of contexts
 you can use in your scenarios.
 
-An example showing multiple contexts being used is below. In this example, steps related to the server have been moved
-to their own context:
+An example showing multiple contexts being used is below. In this example, steps relating to the server and exception handling have been moved
+to their own contexts:
 
 ```csharp
     [Fact]
@@ -142,9 +155,51 @@ BurplessSettings.Configure(x => x.UseServiceProvider(myContainer));
 For example, you can start an ASP.NET Core API, and use the built service container to inject services into your contexts.
 
 ### Framework examples
-Examples for the major testing frameworks have been given below:
+Examples for the major testing frameworks are provided below:
 
 #### xUnit
+```csharp
+[Collection(nameof(ApplicationCollection))]
+public class WeatherFeature
+{
+    [Fact]
+    public Task FetchesTheWeatherForecast() => Scenario.For<WeatherContext>()
+        .Given(x => x.TheWeatherServerIsRunning())
+        .When(x => x.TheWeatherIsFetched())
+        .Then(x => x.WeatherDataShouldBeReturned());
+}
+
+public class WeatherContext(ApplicationFactory factory)
+{
+    public async Task TheWeatherIsFetched()
+    {
+        var client = factory.CreateClient();
+
+        await client.GetAsync("/weatherforecast");
+    }
+}
+
+[CollectionDefinition(nameof(ApplicationCollection))]
+public class ApplicationCollection : ICollectionFixture<ApplicationFactory>
+{
+}
+
+public class ApplicationFactory : WebApplicationFactory<Program>
+{
+    public ApplicationFactory()
+    {
+        // Allow contexts to be injected with services from the app
+        BurplessSettings.Configure(x => x.UseServiceProvider(Services));
+    }
+
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        builder.ConfigureTestServices(services => services.AddSingleton(fixture));
+    }
+}
+```
+
+#### NUnit
 ```csharp
 public class WeatherFeature
 {
@@ -155,31 +210,32 @@ public class WeatherFeature
         .Then(x => x.WeatherDataShouldBeReturned());
 }
 
-public class WeatherContext
+public class WeatherContext(ApplicationFactory factory)
 {
-}
-
-[CollectionDefinition(nameof(ApplicationCollection)]
-public class ApplicationCollection : ICollectionFixture<ApplicationFixture>
-{
-}
-
-public class ApplicationFixture : IDisposable
-{
-    public WebApplicationFactory<Program> Factory { get; private set; }
-
-    public ApplicationFixture()
+    public async Task TheWeatherIsFetched()
     {
-        Factory = new WebApplicationFactory<Program>();
+        var client = factory.CreateClient();
 
+        await client.GetAsync("/weatherforecast");
+    }
+}
+
+[SetUpFixture]
+public class ApplicationFactory : WebApplicationFactory<Program>
+{
+    [OneTimeSetUp]
+    public void Setup()
+    {
         // Allow contexts to be injected with services from the app
-        BurplessSettings.Configure(x => x.UseServiceProvider(Factory.Services));
+        BurplessSettings.Configure(services => services.UseServiceProvider(Services));
+    }
+
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        builder.ConfigureTestServices(services => services.AddSingleton(this));
     }
 }
 ```
-
-#### NUnit
-
 
 #### TUnit
 ```csharp
@@ -192,48 +248,34 @@ public class WeatherFeature
         .Then(x => x.WeatherDataShouldBeReturned());
 }
 
-// ASP.NET Core services can be injected into contexts
-private class WeatherContext(IWebHostEnvironment environmnet) : ContextBase
+public class WeatherContext(ApplicationFactory factory)
 {
-    private string? weather;
-
-    public void TheWeatherServerIsRunning()
-    {
-    }
-
     public async Task TheWeatherIsFetched()
     {
-        weather = await Client.GetStringAsync("/weatherforecast");
-    }
+        var client = factory.CreateClient();
 
-    public async Task WeatherDataShouldBeReturned()
-    {
-        await Assert.That(weather).IsNotNullOrEmpty();
+        await client.GetAsync("/weatherforecast");
     }
 }
 
-public class ContextBase
+public class ApplicationFactory : WebApplicationFactory<Program>
 {
-    private WebApplicationFactory<Program> factory;
-
-    protected HttpClient Client { get; private set; }
+    private static ApplicationFactory? factory;
 
     [Before(TestSession)]
-    public void BeforeSession()
+    public static void Setup()
     {
-        factory = new WebApplicationFactory<Program>();
+        factory = new ApplicationFactory();
 
         // Allow contexts to be injected with services from the app
-        BurplessSettings.Configure(x => x.UseServiceProvider(factory.Services));
+        BurplessSettings.Configure(services => services.UseServiceProvider(factory.Services));
     }
 
-    [Before(Test)]
-    public void BeforeTest()
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        Client = factory.CreateClient();
+        builder.ConfigureTestServices(services => services.AddSingleton(this));
     }
 }
-
 ```
 
 ## Philosophy
@@ -254,11 +296,12 @@ A framework for behavior testing should focus on the developer experience.
 
 Here are some of the benefits of using a code-first approach to behavior testing:
 
- - No need to rely on flaky plugins for your IDE that bridge the gap between Gherkin and code-behind source
- - Refactoring scenarios is much simpler and can leverage your in-built refactoring tools
- - Where the framework resembles Gherkin syntax, living documentation can still be generated if desired
+ - Fluently create scenarios using natural C# code
+ - Compile-time verification of your steps
+ - Refactoring scenarios and steps is much simpler and can leverage your in-built refactoring tools
  - No tedious mapping of Gherkin language steps to code-behind source
  - Framework-agnostic, and will work with the test framework of your choice (xUnit, NUnit, TUnit)
+ - No flaky plugins for your IDE that try to bridge the gap between Gherkin and code-behind source
 
 ## Get in touch
 Raise an [issue here](https://github.com/robertcoltheart/Burpless/issues).
