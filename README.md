@@ -134,13 +134,99 @@ An example showing multiple contexts being used is below. In this example, steps
 to their own contexts:
 
 ```csharp
+public class WeatherFeature
+{
     [Fact]
     public Task FetchesTheWeatherForecast() => Scenario.For<WeatherContext>()
         .Given<ServerContext>(x => x.TheWeatherServerIsRunning())
         .When(x => x.TheWeatherIsFetched())
         .Then(x => x.WeatherDataShouldBeReturned())
         .And<ExceptionsContext>(x => x.ThereShouldBeNoErrors());
+}
 ```
+
+### Tables and tabular data
+Burpless supports the creation of Gherkin tables in a variety of ways. Below are some examples of how tables can be constructed:
+
+#### From typed objects
+```csharp
+public class WeatherFeature
+{
+    [Fact]
+    public Task FetchesTheWeatherForecast() => Scenario.For<WeatherContext>()
+        .When(x => x.TheWeatherIsFetched())
+        .Then(x => x.ItShouldReturn(Table.From(
+            new Weather { TemperatureC = 3, Summary = "Freezing", Date = new DateOnly(2024, 12, 25) },
+            new Weather { TemperatureC = 4, Summary = "Bracing", Date = new DateOnly(2024, 12, 26) })));
+}
+```
+
+#### Using fluent table builders
+```csharp
+public class WeatherFeature
+{
+    [Fact]
+    public Task FetchesTheWeatherForecast() => Scenario.For<WeatherContext>()
+        .When(x => x.TheWeatherIsFetched())
+        .Then(x => x.ItShouldReturn(Table
+            .WithColumns("TemperatureC", "Summary", "Date")
+            .AddRow("3", "Freezing", "2024-12-25")
+            .AddRow("4", "Bracing", "2024-12-26")));
+}
+```
+
+#### With Gherkin syntax
+```csharp
+public class WeatherFeature
+{
+    [Fact]
+    public Task FetchesTheWeatherForecast() => Scenario.For<WeatherContext>()
+        .When(x => x.TheWeatherIsFetched())
+        .Then(x => x.ItShouldReturn(
+            """
+            | TemperatureC | Summary  | Date       |
+            | 3            | Freezing | 2024-12-25 |
+            | 4            | Bracing  | 2024-12-26 |
+            """));
+}
+```
+
+In your contexts, you can convert the tables to C# objects, or verify the data matches a set of data, as below:
+
+```csharp
+public class WeatherContext
+{
+    private Weather[]? weather;
+
+    public void CanConvertTable(Table table)
+    {
+        var first = table.Get<Weather>(); // Get the first row or throw if no rows
+
+        weather = table.GetAll<Weather>(); // Get all rows in the table
+    }
+
+    public void ItShouldReturn(Table table)
+    {
+        table.ShouldEqual(weather);
+    }
+}
+```
+
+Another way of validating tabular data is to use a table validator, as in the example below;
+
+```csharp
+public class WeatherFeature
+{
+    [Test]
+    public Task FetchesTheWeatherForecast() => Scenario.For<WeatherContext>()
+        .When(x => x.TheWeatherForecastIsFetched())
+        .Then(x => x.TheFollowingDataIsReturned(Table.Validate<Weather>(validator => validator
+            .WithColumn(c => c.TemperatureC, c => c > 2)
+            .WithColumn(c => c.TemperatureF, c => c > 30))));
+}
+```
+
+As above, you can call `table.ShouldEqual(data)` to run the validator and verify your table meets the expectations.
 
 ### Configuration options
 During the test session startup, you can configure Burpless to inject services into your contexts from your dependency
