@@ -24,7 +24,7 @@ public class ScenarioRunnerTests
     public async Task CanRunGivenStep()
     {
         var details = new ScenarioDetails();
-        details.Steps.Add(new ScenarioStep<Context>("Given", StepType.Given, c => c.Call()));
+        details.Steps.Add(new TypedScenarioStep<Context>("Given", StepType.Given, c => c.Call()));
 
         var runner = new ScenarioRunner(services, details);
         await runner.Execute();
@@ -36,7 +36,7 @@ public class ScenarioRunnerTests
     public async Task CanRunWhenStep()
     {
         var details = new ScenarioDetails();
-        details.Steps.Add(new ScenarioStep<Context>("When", StepType.When, c => c.Call()));
+        details.Steps.Add(new TypedScenarioStep<Context>("When", StepType.When, c => c.Call()));
 
         var runner = new ScenarioRunner(services, details);
         await runner.Execute();
@@ -48,7 +48,7 @@ public class ScenarioRunnerTests
     public async Task CanRunThenStep()
     {
         var details = new ScenarioDetails();
-        details.Steps.Add(new ScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
+        details.Steps.Add(new TypedScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
 
         var runner = new ScenarioRunner(services, details);
         await runner.Execute();
@@ -62,7 +62,7 @@ public class ScenarioRunnerTests
         var details = new ScenarioDetails();
         details.Feature = Feature.Named("Feature")
             .Background<Context>(x => x.Given(c => c.Call()));
-        details.Steps.Add(new ScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
+        details.Steps.Add(new TypedScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
 
         var runner = new ScenarioRunner(services, details);
         await runner.Execute();
@@ -77,7 +77,7 @@ public class ScenarioRunnerTests
         var details = new ScenarioDetails();
         details.Feature = Feature.Named("Feature")
             .Background<FeatureContext>(x => x.Given(c => c.Call()));
-        details.Steps.Add(new ScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
+        details.Steps.Add(new TypedScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
 
         var runner = new ScenarioRunner(services, details);
         await runner.Execute();
@@ -94,7 +94,7 @@ public class ScenarioRunnerTests
     {
         var details = new ScenarioDetails();
         details.Feature = Feature.Named("Feature");
-        details.Steps.Add(new ScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
+        details.Steps.Add(new TypedScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
 
         var runner = new ScenarioRunner(services, details);
         await runner.Execute();
@@ -109,10 +109,10 @@ public class ScenarioRunnerTests
     public async Task RunsWithMultipleContextsAsSingletons()
     {
         var details = new ScenarioDetails();
-        details.Steps.Add(new ScenarioStep<Context>("When", StepType.When, c => c.Call()));
-        details.Steps.Add(new ScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
-        details.Steps.Add(new ScenarioStep<AnotherContext>("Then also", StepType.Then, c => c.Call()));
-        details.Steps.Add(new ScenarioStep<AnotherContext>("But", StepType.Then, c => c.Call()));
+        details.Steps.Add(new TypedScenarioStep<Context>("When", StepType.When, c => c.Call()));
+        details.Steps.Add(new TypedScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
+        details.Steps.Add(new TypedScenarioStep<AnotherContext>("Then also", StepType.Then, c => c.Call()));
+        details.Steps.Add(new TypedScenarioStep<AnotherContext>("But", StepType.Then, c => c.Call()));
 
         var runner = new ScenarioRunner(services, details);
         await runner.Execute();

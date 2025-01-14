@@ -13,7 +13,7 @@ public class BackgroundBuilder<TContext>
     {
     }
 
-    internal List<IScenarioStep> Steps { get; set; } = [];
+    internal List<ScenarioStep> Steps { get; set; } = [];
 
     /// <summary>
     /// Adds a 'given' step to the background.
@@ -54,7 +54,7 @@ public class BackgroundBuilder<TContext>
     /// <returns>The background builder.</returns>
     public BackgroundContinuationBuilder<TContext> Given(string step, Func<TContext, Task> action)
     {
-        var backgroundStep = new ScenarioStep<TContext>(step, StepType.Given, action);
+        var backgroundStep = new TypedScenarioStep<TContext>(step, StepType.Given, action);
 
         Steps.Add(backgroundStep);
 
@@ -108,7 +108,7 @@ public class BackgroundBuilder<TContext>
     public BackgroundContinuationBuilder<TContext> Given<TAdditionalContext>(string step, Func<TAdditionalContext, Task> action)
         where TAdditionalContext : class
     {
-        var backgroundStep = new ScenarioStep<TAdditionalContext>(step, StepType.Given, action);
+        var backgroundStep = new TypedScenarioStep<TAdditionalContext>(step, StepType.Given, action);
 
         Steps.Add(backgroundStep);
 

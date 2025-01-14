@@ -37,7 +37,7 @@ public abstract class ScenarioExecutor<TContext>
     internal void AddStep<T>(string name, StepType type, Func<T, Task> action)
         where T : class
     {
-        var scenarioStep = new ScenarioStep<T>(name, type, action);
+        var scenarioStep = new TypedScenarioStep<T>(name, type, action);
 
         Details.Steps.Add(scenarioStep);
     }

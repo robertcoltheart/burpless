@@ -36,7 +36,7 @@ public class FeatureTests
             .Background<Context>(background => background
                 .Given(x => x.Given()));
 
-        await Assert.That(feature.Steps).IsNotEmpty();
+        await Assert.That(feature.BackgroundSteps).IsNotEmpty();
     }
 
     [Test]
@@ -46,7 +46,7 @@ public class FeatureTests
             .Background<Context>(background => background
                 .Given("some action", x => x.Given()));
 
-        await Assert.That(feature.Steps).IsNotEmpty();
+        await Assert.That(feature.BackgroundSteps).IsNotEmpty();
     }
 
     [Test]

@@ -14,7 +14,7 @@ public class Feature : IEquatable<Feature>
     /// <summary>
     /// Gets the name of the feature.
     /// </summary>
-    public string Name { get; private set; } = null!;
+    public string Name { get; private init; } = null!;
 
     /// <summary>
     /// Gets the detailed description of the feature.
@@ -26,7 +26,10 @@ public class Feature : IEquatable<Feature>
     /// </summary>
     public IReadOnlyCollection<string> Tags { get; private set; } = [];
 
-    internal IReadOnlyCollection<IScenarioStep>? Steps { get; private set; }
+    /// <summary>
+    /// Gets the list of background steps that belong to this feature.
+    /// </summary>
+    public IReadOnlyCollection<ScenarioStep> BackgroundSteps { get; private set; } = [];
 
     /// <summary>
     /// Creates a feature with the specified name.
@@ -77,7 +80,7 @@ public class Feature : IEquatable<Feature>
         var builder = new BackgroundBuilder<TContext>();
         action(builder);
 
-        Steps = builder.Steps;
+        BackgroundSteps = builder.Steps;
 
         return this;
     }

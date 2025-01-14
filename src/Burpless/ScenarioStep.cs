@@ -1,20 +1,23 @@
-﻿namespace Burpless;
+namespace Burpless;
 
-internal class ScenarioStep<T>(string name, StepType type, Func<T, Task> action) : IScenarioStep
+/// <summary>
+/// A step in a scenario.
+/// </summary>
+/// <param name="name"></param>
+/// <param name="type"></param>
+public abstract class ScenarioStep(string name, StepType type)
 {
+    /// <summary>
+    /// Gets the name of the step.
+    /// </summary>
     public string Name { get; } = name;
 
+    /// <summary>
+    /// Gets the type of the step (given, when or then).
+    /// </summary>
     public StepType Type { get; } = type;
 
-    public Type ContextType { get; } = typeof(T);
+    internal abstract Type ContextType { get; }
 
-    public Task Execute(object context)
-    {
-        if (context is not T typedContext)
-        {
-            throw new ArgumentException($"Invalid context type, expected {typeof(T)} but got {context.GetType()}");
-        }
-
-        return action(typedContext);
-    }
+    internal abstract Task Execute(object context);
 }

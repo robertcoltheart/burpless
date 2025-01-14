@@ -7,9 +7,10 @@
 public class ScenarioGroupingBuilder<TContext> : DescriptionBuilder<TContext>
     where TContext : class
 {
-    internal ScenarioGroupingBuilder(string? name)
+    internal ScenarioGroupingBuilder(string? name, string? impliedFeature = null)
     {
         Details.Name = name;
+        Details.ImpliedFeature = impliedFeature;
     }
 
     /// <summary>

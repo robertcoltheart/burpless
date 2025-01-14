@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using Burpless.Publishing;
 using Burpless.Services;
 using Burpless.Tables;
 
@@ -9,11 +10,15 @@ namespace Burpless;
 /// </summary>
 public class BurplessSettings
 {
+    internal static BurplessSettings Instance { get; } = new();
+
     internal IServiceProvider Services { get; private set; } = new SimpleServiceProvider();
 
     internal ConcurrentDictionary<Type, object> CustomParsers { get; } = new();
 
-    internal static BurplessSettings Instance { get; } = new();
+    internal List<IPublisher> Publishers { get; } = new();
+
+    internal ScenarioCollector ScenariosCollector { get; } = new();
 
     /// <summary>
     /// Sets the global configuration values.
@@ -45,6 +50,18 @@ public class BurplessSettings
     public BurplessSettings AddCustomParser<T>(IParser<T> parser)
     {
         CustomParsers.AddOrUpdate(typeof(T), parser, (_, _) => parser);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Adds a publisher that is used when publishing features and scenarios for the purpose of documentation.
+    /// </summary>
+    /// <param name="publisher">The publisher to use when publishing documentation.</param>
+    /// <returns>The configuration.</returns>
+    public BurplessSettings AddPublisher(IPublisher publisher)
+    {
+        Publishers.Add(publisher);
 
         return this;
     }
