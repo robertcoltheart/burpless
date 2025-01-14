@@ -1,5 +1,4 @@
 ﻿using Burpless.Example.WebApi.Tests.Contexts;
-using Burpless.Example.WebApi.Tests.Rest;
 
 namespace Burpless.Example.WebApi.Tests.Features;
 
