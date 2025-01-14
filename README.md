@@ -191,19 +191,43 @@ public class WeatherFeature
 }
 ```
 
-In your contexts, you can convert the tables to C# objects, or verify the data matches a set of data, as below:
+In your contexts, you can convert tables to C# objects, for example to send to an API or use in your testing:
 
 ```csharp
 public class WeatherContext
 {
-    private Weather[]? weather;
-
-    public void CanConvertTable(Table table)
+    public void ConvertTableToObject(Table table)
     {
         var first = table.Get<Weather>(); // Get the first row or throw if no rows
 
-        weather = table.GetAll<Weather>(); // Get all rows in the table
+        var all = table.GetAll<Weather>(); // Get all rows in the table
     }
+}
+```
+Burpless does it's best to convert your table columns to the typed object by mapping column names to properties. Any type
+that supports `IParsable<T>` is compatible, but if you want to add your own custom parsing logic, you can implement `IParser<T>`
+and then register it using `BurplessSettings.Configure(x => x.AddCustomParser(myParser))`.
+
+You can also use tables to verify a set of data matches what you are expecting. The most obvious use case is to do an exact
+match of all the rows and columns of a table, for example:
+
+```csharp
+public class WeatherFeature
+{
+    [Fact]
+    public Task FetchesTheWeatherForecast() => Scenario.For<WeatherContext>()
+        .When(x => x.TheWeatherIsFetched())
+        .Then(x => x.ItShouldReturn(
+            """
+            | TemperatureC | Summary  | Date       |
+            | 3            | Freezing | 2024-12-25 |
+            | 4            | Bracing  | 2024-12-26 |
+            """));
+}
+
+public class WeatherContext
+{
+    private Weather[] weather; // Weather data returned from the API
 
     public void ItShouldReturn(Table table)
     {
