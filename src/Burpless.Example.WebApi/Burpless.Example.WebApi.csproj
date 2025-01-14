@@ -8,8 +8,4 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <InternalsVisibleTo Include="Interdictor.Example.WebApi.Tests" />
-  </ItemGroup>
-
 </Project>
