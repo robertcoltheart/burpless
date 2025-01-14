@@ -18,7 +18,7 @@ public class ScenarioGroupingBuilderTests
         var feature = Feature.Named("feature");
         
         var builder = new ScenarioGroupingBuilder<object>("name")
-            .Feature(feature);
+            .ForFeature(feature);
 
         await Assert.That(builder.Details.Feature).IsEqualTo(feature);
     }

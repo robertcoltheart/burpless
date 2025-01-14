@@ -8,7 +8,7 @@ public class DescriptionBuilderTests
     public async Task CanSetNameViaBuilder()
     {
         var builder = new DescriptionBuilder<object>()
-            .Name("ScenarioName");
+            .Named("ScenarioName");
 
         await Assert.That(builder.Details.Name).IsEqualTo("ScenarioName");
     }
@@ -17,7 +17,7 @@ public class DescriptionBuilderTests
     public async Task CanSetDescription()
     {
         var builder = new DescriptionBuilder<object>()
-            .Description("MyDescription");
+            .DescribedBy("MyDescription");
 
         await Assert.That(builder.Details.Description).IsEqualTo("MyDescription");
     }
@@ -26,7 +26,7 @@ public class DescriptionBuilderTests
     public async Task CanSetTags()
     {
         var builder = new DescriptionBuilder<object>()
-            .Tags("tag1", "tag2");
+            .WithTags("tag1", "tag2");
 
         await Assert.That(builder.Details.Tags).Contains("tag1");
         await Assert.That(builder.Details.Tags).Contains("tag2");

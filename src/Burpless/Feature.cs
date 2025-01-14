@@ -46,7 +46,7 @@ public class Feature : IEquatable<Feature>
     /// </summary>
     /// <param name="description">The specified description of the feature.</param>
     /// <returns>The feature.</returns>
-    public Feature WithDescription(string description)
+    public Feature DescribedBy(string description)
     {
         Description = description;
 
@@ -71,7 +71,7 @@ public class Feature : IEquatable<Feature>
     /// <typeparam name="TContext">The type of the context to use for providing steps to the feature background.</typeparam>
     /// <param name="action">A delegate for configuring the <see cref="Feature"/>.</param>
     /// <returns>The feature.</returns>
-    public Feature WithBackground<TContext>(Action<BackgroundBuilder<TContext>> action)
+    public Feature Background<TContext>(Action<BackgroundBuilder<TContext>> action)
         where TContext : class
     {
         var builder = new BackgroundBuilder<TContext>();

@@ -11,8 +11,8 @@ app.MapGet("/weatherforecast", () =>
 {
     var forecast = new[]
     {
-        new WeatherForecast(new DateOnly(2024, 12, 25), 25, summaries[0]),
-        new WeatherForecast(new DateOnly(2024, 12, 26), 26, summaries[1]),
+        new WeatherForecast(new DateOnly(2024, 12, 25), 3, summaries[0]),
+        new WeatherForecast(new DateOnly(2024, 12, 26), 4, summaries[1]),
     };
 
     return forecast;
