@@ -12,7 +12,7 @@
   <ItemGroup>
     <PackageReference Include="FakeItEasy" Version="8.3.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.1" />
-    <PackageReference Include="TUnit" Version="0.7.24" />
+    <PackageReference Include="TUnit" Version="0.8.4" />
   </ItemGroup>
 
   <ItemGroup>
