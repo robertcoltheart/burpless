@@ -8,7 +8,7 @@ namespace Burpless;
 /// </summary>
 public static class TableExtensions
 {
-    private static readonly TableSerializer serializer = new();
+    private static readonly TableSerializer Serializer = new();
 
     /// <summary>
     /// Parses the first row of a table to the specified type.
@@ -32,7 +32,7 @@ public static class TableExtensions
     public static IEnumerable<T> GetAll<T>(this Table table)
         where T : new()
     {
-        return serializer.Deserialize<T>(table);
+        return Serializer.Deserialize<T>(table);
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ public static class TableExtensions
     /// <param name="table">The <see cref="Table"/> that is used for comparison.</param>
     /// <param name="values">The collection of values that is used for comparison.</param>
     /// <returns><see langword="true" /> if the table and the collection are equal according to the default equality comparer for their type; otherwise, <see langword="false" />.</returns>
-    public static bool AreEqual<T>(this Table table, params IEnumerable<T> values)
+    public static bool AreEqual<T>(this Table table, params IEnumerable<T>? values)
     {
         var differences = GetDifferences(table, values);
 
@@ -56,7 +56,7 @@ public static class TableExtensions
     /// <param name="table">The <see cref="Table"/> that is used for comparison.</param>
     /// <param name="values">The collection of values that is used for comparison.</param>
     /// <exception cref="TableValidationException">The values are not equal to the specified <see cref="Table"/>.</exception>
-    public static void ShouldEqual<T>(this Table table, IEnumerable<T> values)
+    public static void ShouldEqual<T>(this Table table, IEnumerable<T>? values)
     {
         var differences = GetDifferences(table, values)
             .ToArray();
@@ -65,11 +65,11 @@ public static class TableExtensions
         VerifyRows(table, differences);
     }
 
-    private static IEnumerable<IComparison> GetDifferences<T>(Table table, IEnumerable<T> values)
+    private static IEnumerable<IComparison> GetDifferences<T>(Table table, IEnumerable<T>? values)
     {
         var comparer = new TableComparer<T>();
 
-        return comparer.Compare(table, values.ToArray()).ToArray();
+        return comparer.Compare(table, values?.ToArray() ?? []).ToArray();
     }
 
     private static void VerifyColumns(Type type, IComparison[] differences)
