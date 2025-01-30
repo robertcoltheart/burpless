@@ -4,7 +4,8 @@ namespace Burpless.Example.WebApi.Tests.Features;
 
 public class WeatherForecastFeature
 {
-    private readonly Feature feature = Feature.Named("Weather forecast")
+    private readonly Feature feature = Feature.For()
+        .Named("Weather forecast")
         .DescribedBy(
             """
             Various tests against the weather forecast endpoint.

@@ -15,7 +15,7 @@ public class ScenarioGroupingBuilderTests
     [Test]
     public async Task CanSetFeature()
     {
-        var feature = Feature.Named("feature");
+        var feature = Feature.For();
         
         var builder = new ScenarioGroupingBuilder<object>("name")
             .ForFeature(feature);

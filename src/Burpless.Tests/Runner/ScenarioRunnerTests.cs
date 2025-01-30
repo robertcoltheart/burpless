@@ -60,7 +60,7 @@ public class ScenarioRunnerTests
     public async Task CanRunFeatureAndStepsWithSameContext()
     {
         var details = new ScenarioDetails();
-        details.Feature = Feature.Named("Feature")
+        details.Feature = Feature.For()
             .Background<Context>(x => x.Given(c => c.Call()));
         details.Steps.Add(new ScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
 
@@ -75,7 +75,7 @@ public class ScenarioRunnerTests
     public async Task CanRunFeatureAndStepsWithDifferentContexts()
     {
         var details = new ScenarioDetails();
-        details.Feature = Feature.Named("Feature")
+        details.Feature = Feature.For()
             .Background<FeatureContext>(x => x.Given(c => c.Call()));
         details.Steps.Add(new ScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
 
@@ -93,7 +93,7 @@ public class ScenarioRunnerTests
     public async Task IgnoresFeatureWithNoBackground()
     {
         var details = new ScenarioDetails();
-        details.Feature = Feature.Named("Feature");
+        details.Feature = Feature.For();
         details.Steps.Add(new ScenarioStep<Context>("Then", StepType.Then, c => c.Call()));
 
         var runner = new ScenarioRunner(services, details);
