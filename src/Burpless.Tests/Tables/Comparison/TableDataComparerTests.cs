@@ -91,14 +91,13 @@ public class TableDataComparerTests
 
         var result = comparer.Compare(table, [item]);
 
-        if (equal)
-        {
-            await Assert.That(() => result.Single(x => x.Type == ComparisonType.Match)).ThrowsNothing();
-        }
-        else
-        {
-            await Assert.That(() => result.Single(x => x.Type == ComparisonType.Missing)).ThrowsNothing();
-        }
+        var comparisonType = equal
+            ? ComparisonType.Match
+            : ComparisonType.Missing;
+
+        var value = result.SingleOrDefault(x => x.Type == comparisonType);
+
+        await Assert.That(value).IsNotNull();
     }
 
     [Test]
