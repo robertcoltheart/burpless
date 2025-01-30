@@ -29,16 +29,24 @@ public class Feature : IEquatable<Feature>
     internal IReadOnlyCollection<IScenarioStep>? Steps { get; private set; }
 
     /// <summary>
+    /// Creates a feature.
+    /// </summary>
+    /// <returns>The feature.</returns>
+    public static Feature For()
+    {
+        return new Feature();
+    }
+
+    /// <summary>
     /// Creates a feature with the specified name.
     /// </summary>
     /// <param name="name">The name of the feature.</param>
     /// <returns>The feature.</returns>
-    public static Feature Named(string name)
+    public Feature Named(string name)
     {
-        return new Feature
-        {
-            Name = name
-        };
+        Name = name;
+
+        return this;
     }
 
     /// <summary>
@@ -66,7 +74,7 @@ public class Feature : IEquatable<Feature>
     }
 
     /// <summary>
-    /// Sets the background steps of the feature.
+    /// Adds background steps to the feature.
     /// </summary>
     /// <typeparam name="TContext">The type of the context to use for providing steps to the feature background.</typeparam>
     /// <param name="action">A delegate for configuring the <see cref="Feature"/>.</param>
@@ -77,7 +85,9 @@ public class Feature : IEquatable<Feature>
         var builder = new BackgroundBuilder<TContext>();
         action(builder);
 
-        Steps = builder.Steps;
+        Steps ??= [];
+
+        Steps = Steps.Concat(builder.Steps).ToArray();
 
         return this;
     }
