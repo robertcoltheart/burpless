@@ -148,5 +148,19 @@ public class TableTests
             .And.Contains("123.456");
     }
 
+    [Test]
+    public async Task CanEnumerateTable()
+    {
+        var table = Table
+            .WithColumns("Column1", "Column2")
+            .AddRow(123, 123.456);
+
+        var items = table.ToArray();
+
+        await Assert.That(items).HasCount().EqualTo(2);
+        await Assert.That(items[0]).Contains($"Column1").And.Contains($"Column2");
+        await Assert.That(items[1]).Contains($"123").And.Contains($"123.456");
+    }
+
     private record Record(string Column1, string Column2);
 }

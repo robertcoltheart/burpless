@@ -1,4 +1,5 @@
-﻿using Burpless.Tables;
+﻿using System.Collections;
+using Burpless.Tables;
 using Burpless.Tables.Validation;
 
 namespace Burpless;
@@ -9,7 +10,7 @@ namespace Burpless;
 /// <remarks>
 /// The <see cref="Table"/> is compatible with the Gherkin specification for data tables.
 /// </remarks>
-public class Table
+public class Table : IEnumerable<string?[]>
 {
     private static readonly TableParser Parser = new();
 
@@ -232,5 +233,30 @@ public class Table
         {
             throw new InvalidOperationException("Cannot add data when using table validation");
         }
+    }
+
+    /// <summary>
+    /// Returns an enumerator that iterates through the columns and then the rows of the <see cref="Table"/>.
+    /// </summary>
+    /// <returns>An enumerator that iterates through the columns and then the rows of the <see cref="Table"/>.</returns>
+    public IEnumerator<string?[]> GetEnumerator()
+    {
+        var table = new List<string?[]>
+        {
+            Columns.ToArray()
+        };
+
+        table.AddRange(Rows);
+
+        return table.GetEnumerator();
+    }
+
+    /// <summary>
+    /// Returns an enumerator that iterates through the columns and then the rows of the <see cref="Table"/>.
+    /// </summary>
+    /// <returns>An enumerator that iterates through the columns and then the rows of the <see cref="Table"/>.</returns>
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }
