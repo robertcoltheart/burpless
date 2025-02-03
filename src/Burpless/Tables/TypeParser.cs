@@ -51,7 +51,18 @@ internal static class TypeParser
 
         if (BurplessSettings.Instance.CustomParsers.ContainsKey(type))
         {
-            return TryParseCustom(type, value, out parsed);
+            if (TryParseCustom(type, value, out parsed))
+            {
+                return true;
+            }
+        }
+
+        if (type.IsEnum)
+        {
+            if (Enum.TryParse(type, value, true, out parsed!))
+            {
+                return true;
+            }
         }
 
         var isParsable = type
