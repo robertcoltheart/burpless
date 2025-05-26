@@ -66,7 +66,8 @@ Construct a feature in your test class and link it to your scenarios as below:
 ```csharp
 public class WeatherFeature
 {
-    private readonly Feature feature = Feature.Named("Weather forecast")
+    private readonly Feature feature = Feature.For()
+        .Named("Weather forecast")
         .DescribedBy("As a user, I want to see the weather so that I know whether it's sunny")
         .WithTags("weather", "api")
         .Background<ServerContext>(background => background
