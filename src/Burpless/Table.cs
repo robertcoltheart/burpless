@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Burpless.Tables;
+using Burpless.Tables.Comparison;
 using Burpless.Tables.Validation;
 
 namespace Burpless;
@@ -258,5 +259,19 @@ public class Table : IEnumerable<string?[]>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
+    }
+
+    /// <inheritdoc />
+    public override string ToString()
+    {
+        var builder = new ComparisonBuilder()
+            .AppendTableHeaders(Columns);
+
+        foreach (var row in Rows)
+        {
+            builder.AppendRowDifference(ComparisonType.Match, row.Select(x => x ?? string.Empty));
+        }
+
+        return builder.ToString();
     }
 }
