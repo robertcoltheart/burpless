@@ -62,7 +62,7 @@ public static class TableExtensions
             .ToArray();
 
         VerifyColumns(typeof(T), differences);
-        VerifyRows(table, differences);
+        VerifyRows(table, differences, [ComparisonType.Additional, ComparisonType.Missing]);
     }
 
     /// <summary>
@@ -76,7 +76,7 @@ public static class TableExtensions
     {
         var differences = GetDifferences(table, values);
 
-        return differences.All(x => x.Type is not ComparisonType.Missing);
+        return differences.All(x => x.Type is not ComparisonType.Additional);
     }
 
     /// <summary>
@@ -88,7 +88,11 @@ public static class TableExtensions
     /// <exception cref="TableValidationException">The <see cref="Table"/> does not contain the items in the collection specified.</exception>
     public static void ShouldContain<T>(this Table table, IEnumerable<T> values)
     {
+        var differences = GetDifferences(table, values)
+            .ToArray();
 
+        VerifyColumns(typeof(T), differences);
+        VerifyRows(table, differences, [ComparisonType.Additional]);
     }
 
     /// <summary>
@@ -102,7 +106,7 @@ public static class TableExtensions
     {
         var differences = GetDifferences(table, values);
 
-        return differences.All(x => x.Type is not ComparisonType.Additional);
+        return differences.All(x => x.Type is not ComparisonType.Missing);
     }
 
     /// <summary>
@@ -114,7 +118,11 @@ public static class TableExtensions
     /// <exception cref="TableValidationException">The collection specified does not contain the items in the <see cref="Table"/>.</exception>
     public static void ShouldBeSubsetOf<T>(this Table table, IEnumerable<T> values)
     {
+        var differences = GetDifferences(table, values)
+            .ToArray();
 
+        VerifyColumns(typeof(T), differences);
+        VerifyRows(table, differences, [ComparisonType.Missing]);
     }
 
     private static IEnumerable<IComparison> GetDifferences<T>(Table table, IEnumerable<T>? values)
@@ -144,13 +152,13 @@ public static class TableExtensions
         }
     }
 
-    private static void VerifyRows(Table table, IComparison[] differences)
+    private static void VerifyRows(Table table, IComparison[] differences, ComparisonType[] types)
     {
         var rowDifferences = differences
             .Where(x => x.Element == ElementType.Row)
             .ToArray();
 
-        if (rowDifferences.Any(x => x.Type != ComparisonType.Match))
+        if (rowDifferences.Any(x => types.Contains(x.Type)))
         {
             var results = new ComparisonBuilder()
                 .AppendTableHeaders(table.Columns);

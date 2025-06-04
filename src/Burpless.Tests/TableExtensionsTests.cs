@@ -1,4 +1,6 @@
-﻿namespace Burpless.Tests;
+﻿using TUnit.Assertions.AssertConditions.Throws;
+
+namespace Burpless.Tests;
 
 public class TableExtensionsTests
 {
@@ -116,8 +118,8 @@ public class TableExtensionsTests
 
         await Assert.That(value).IsEqualTo(
             """
-            | String Column | Int Column | Date Time Column | Date Only Column | Time Only Column | Decimal Column |
-            | string        | 5          | 2025-10-25       | 2025-10-24       | 14:12:11         | 1.234          |
+              | String Column | Int Column | Date Time Column | Date Only Column | Time Only Column | Decimal Column |
+              | string        | 5          | 2025-10-25       | 2025-10-24       | 14:12:11         | 1.234          |
             """);
     }
 
@@ -147,6 +149,31 @@ public class TableExtensionsTests
     }
 
     [Test]
+    public async Task TableAndCollectionAreNotEqual()
+    {
+        var table = Table.Parse(
+            """
+            | String Column | Int Column | Date Time Column | Date Only Column | Time Only Column | Decimal Column |
+            | string        | 5          | 2025-10-25       | 2025-10-24       | 14:12:11         | 1.234          |
+            """);
+
+        var collection = new[]
+        {
+            new PropertyClass
+            {
+                StringColumn = "string1",
+                IntColumn = 5,
+                DateTimeColumn = new DateTime(2025, 10, 25),
+                DateOnlyColumn = new DateOnly(2025, 10, 24),
+                TimeOnlyColumn = new TimeOnly(14, 12, 11),
+                DecimalColumn = 1.234m
+            }
+        };
+
+        await Assert.That(() => table.ShouldEqual(collection)).Throws<TableValidationException>();
+    }
+
+    [Test]
     public void TableShouldContainCollection()
     {
         var table = Table.Parse(
@@ -173,12 +200,38 @@ public class TableExtensionsTests
     }
 
     [Test]
+    public async Task TableShouldNotContainCollection()
+    {
+        var table = Table.Parse(
+            """
+            | String Column  | Int Column | Date Time Column | Date Only Column | Time Only Column | Decimal Column |
+            | string1        | 5          | 2025-10-25       | 2025-10-24       | 14:12:11         | 1.234          |
+            | string2        | 5          | 2025-10-25       | 2025-10-24       | 14:12:11         | 1.234          |
+            """);
+
+        var collection = new[]
+        {
+            new PropertyClass
+            {
+                StringColumn = "string",
+                IntColumn = 5,
+                DateTimeColumn = new DateTime(2025, 10, 25),
+                DateOnlyColumn = new DateOnly(2025, 10, 24),
+                TimeOnlyColumn = new TimeOnly(14, 12, 11),
+                DecimalColumn = 1.234m
+            }
+        };
+
+        await Assert.That(() => table.ShouldContain(collection)).Throws<TableValidationException>();
+    }
+
+    [Test]
     public void TableShouldBeSubsetOfCollection()
     {
         var table = Table.Parse(
             """
-            | String Column | Int Column | Date Time Column | Date Only Column | Time Only Column | Decimal Column |
-            | string        | 5          | 2025-10-25       | 2025-10-24       | 14:12:11         | 1.234          |
+            | String Column  | Int Column | Date Time Column | Date Only Column | Time Only Column | Decimal Column |
+            | string1        | 5          | 2025-10-25       | 2025-10-24       | 14:12:11         | 1.234          |
             """);
 
         var collection = new[]
@@ -200,10 +253,35 @@ public class TableExtensionsTests
                 DateOnlyColumn = new DateOnly(2025, 10, 24),
                 TimeOnlyColumn = new TimeOnly(14, 12, 11),
                 DecimalColumn = 1.234m
-            },
+            }
         };
 
         table.ShouldBeSubsetOf(collection);
+    }
+
+    [Test]
+    public async Task TableShouldNotBeSubsetOfCollection()
+    {
+        var table = Table.Parse(
+            """
+            | String Column | Int Column | Date Time Column | Date Only Column | Time Only Column | Decimal Column |
+            | string        | 5          | 2025-10-25       | 2025-10-24       | 14:12:11         | 1.234          |
+            """);
+
+        var collection = new[]
+        {
+            new PropertyClass
+            {
+                StringColumn = "string1",
+                IntColumn = 5,
+                DateTimeColumn = new DateTime(2025, 10, 25),
+                DateOnlyColumn = new DateOnly(2025, 10, 24),
+                TimeOnlyColumn = new TimeOnly(14, 12, 11),
+                DecimalColumn = 1.234m
+            }
+        };
+
+        await Assert.That(() => table.ShouldBeSubsetOf(collection)).Throws<TableValidationException>();
     }
 
     private class PropertyClass
