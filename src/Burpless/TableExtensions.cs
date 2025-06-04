@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using Burpless.Tables;
 using Burpless.Tables.Comparison;
 
@@ -63,6 +64,28 @@ public static class TableExtensions
 
         VerifyColumns(typeof(T), differences);
         VerifyRows(table, differences);
+    }
+
+    /// <summary>
+    /// Determines whether a table's rows are contained in the provided collection of objects.
+    /// </summary>
+    /// <remarks>
+    /// Only the provided table's rows are considered, and any additional rows in the collection are ignored.
+    /// </remarks>
+    /// <typeparam name="T">The type of the elements of <paramref name="values"/>.</typeparam>
+    /// <param name="table">The <see cref="Table"/> that is used for comparison.</param>
+    /// <param name="values">The collection of values that is used for comparison.</param>
+    /// <returns><see langword="true" /> if the table's rows are contained in the collection according to the default equality comparer for their type; otherwise, <see langword="false" />.</returns>
+    public static bool Contains<T>(this Table table, params IEnumerable<T>? values)
+    {
+        var differences = GetDifferences(table, values);
+
+        return differences.All(x => x.Type is not ComparisonType.Missing);
+    }
+
+    public static void ShouldContain<T>(this Table table, IEnumerable<T> values)
+    {
+
     }
 
     private static IEnumerable<IComparison> GetDifferences<T>(Table table, IEnumerable<T>? values)

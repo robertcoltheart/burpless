@@ -103,6 +103,33 @@ public class TableExtensionsTests
         await Assert.That(result).IsEqualTo(equal);
     }
 
+    [Test]
+    public void TableAndCollectionAreEqual()
+    {
+        var table = Table.Parse(
+            """
+            | String Column | Int Column | Date Time Column | Date Only Column | Time Only Column | Decimal Column |
+            | string        | 5          | 2025-10-25       | 2025-10-24       | 14:12:11         | 1.234          |
+            """);
+
+        var collection = new[]
+        {
+            new PropertyClass
+            {
+                StringColumn = "string",
+                IntColumn = 5,
+                DateTimeColumn = new DateTime(2025, 10, 25),
+                DateOnlyColumn = new DateOnly(2025, 10, 24),
+                TimeOnlyColumn = new TimeOnly(14, 12, 11),
+                DecimalColumn = 1.234m
+            }
+        };
+
+        table.ShouldEqual(collection);
+    }
+
+
+
     private class PropertyClass
     {
         public string StringColumn { get; set; } = null!;
