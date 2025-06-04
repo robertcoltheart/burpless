@@ -1,4 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
 using Burpless.Tables;
 using Burpless.Tables.Comparison;
 
@@ -67,15 +66,12 @@ public static class TableExtensions
     }
 
     /// <summary>
-    /// Determines whether a table's rows are contained in the provided collection of objects.
+    /// Determines whether a table contains the items in the provided collection of objects.
     /// </summary>
-    /// <remarks>
-    /// Only the provided table's rows are considered, and any additional rows in the collection are ignored.
-    /// </remarks>
     /// <typeparam name="T">The type of the elements of <paramref name="values"/>.</typeparam>
     /// <param name="table">The <see cref="Table"/> that is used for comparison.</param>
     /// <param name="values">The collection of values that is used for comparison.</param>
-    /// <returns><see langword="true" /> if the table's rows are contained in the collection according to the default equality comparer for their type; otherwise, <see langword="false" />.</returns>
+    /// <returns><see langword="true" /> if the table contains the items in the collection according to the default equality comparer for their type; otherwise, <see langword="false" />.</returns>
     public static bool Contains<T>(this Table table, params IEnumerable<T>? values)
     {
         var differences = GetDifferences(table, values);
@@ -83,7 +79,40 @@ public static class TableExtensions
         return differences.All(x => x.Type is not ComparisonType.Missing);
     }
 
+    /// <summary>
+    /// Determines whether a table contains the items in the provided collection of objects, and throws an exception if the table does not contain all the items in the collection.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements of <paramref name="values"/>.</typeparam>
+    /// <param name="table">The <see cref="Table"/> that is used for comparison.</param>
+    /// <param name="values">The collection of values that is used for comparison.</param>
+    /// <exception cref="TableValidationException">The <see cref="Table"/> does not contain the items in the collection specified.</exception>
     public static void ShouldContain<T>(this Table table, IEnumerable<T> values)
+    {
+
+    }
+
+    /// <summary>
+    /// Determines whether a table is contained within the provided collection of objects.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements of <paramref name="values"/>.</typeparam>
+    /// <param name="table">The <see cref="Table"/> that is used for comparison.</param>
+    /// <param name="values">The collection of values that is used for comparison.</param>
+    /// <returns><see langword="true" /> if the table is contained within the collection according to the default equality comparer for their type; otherwise, <see langword="false" />.</returns>
+    public static bool IsSubsetOf<T>(this Table table, params IEnumerable<T>? values)
+    {
+        var differences = GetDifferences(table, values);
+
+        return differences.All(x => x.Type is not ComparisonType.Additional);
+    }
+
+    /// <summary>
+    /// Determines whether a table is contained within the provided collection of objects, and throws an exception if the collection does not contain all the items in the table.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements of <paramref name="values"/>.</typeparam>
+    /// <param name="table">The <see cref="Table"/> that is used for comparison.</param>
+    /// <param name="values">The collection of values that is used for comparison.</param>
+    /// <exception cref="TableValidationException">The collection specified does not contain the items in the <see cref="Table"/>.</exception>
+    public static void ShouldBeSubsetOf<T>(this Table table, IEnumerable<T> values)
     {
 
     }

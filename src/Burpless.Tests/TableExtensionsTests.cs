@@ -104,6 +104,24 @@ public class TableExtensionsTests
     }
 
     [Test]
+    public async Task CanToStringTable()
+    {
+        var table = Table.Parse(
+            """
+            | String Column | Int Column | Date Time Column | Date Only Column | Time Only Column | Decimal Column |
+            | string        | 5          | 2025-10-25       | 2025-10-24       | 14:12:11         | 1.234          |
+            """);
+
+        var value = table.ToString();
+
+        await Assert.That(value).IsEqualTo(
+            """
+            | String Column | Int Column | Date Time Column | Date Only Column | Time Only Column | Decimal Column |
+            | string        | 5          | 2025-10-25       | 2025-10-24       | 14:12:11         | 1.234          |
+            """);
+    }
+
+    [Test]
     public void TableAndCollectionAreEqual()
     {
         var table = Table.Parse(
@@ -128,7 +146,65 @@ public class TableExtensionsTests
         table.ShouldEqual(collection);
     }
 
+    [Test]
+    public void TableShouldContainCollection()
+    {
+        var table = Table.Parse(
+            """
+            | String Column  | Int Column | Date Time Column | Date Only Column | Time Only Column | Decimal Column |
+            | string1        | 5          | 2025-10-25       | 2025-10-24       | 14:12:11         | 1.234          |
+            | string2        | 5          | 2025-10-25       | 2025-10-24       | 14:12:11         | 1.234          |
+            """);
 
+        var collection = new[]
+        {
+            new PropertyClass
+            {
+                StringColumn = "string1",
+                IntColumn = 5,
+                DateTimeColumn = new DateTime(2025, 10, 25),
+                DateOnlyColumn = new DateOnly(2025, 10, 24),
+                TimeOnlyColumn = new TimeOnly(14, 12, 11),
+                DecimalColumn = 1.234m
+            }
+        };
+
+        table.ShouldContain(collection);
+    }
+
+    [Test]
+    public void TableShouldBeSubsetOfCollection()
+    {
+        var table = Table.Parse(
+            """
+            | String Column | Int Column | Date Time Column | Date Only Column | Time Only Column | Decimal Column |
+            | string        | 5          | 2025-10-25       | 2025-10-24       | 14:12:11         | 1.234          |
+            """);
+
+        var collection = new[]
+        {
+            new PropertyClass
+            {
+                StringColumn = "string1",
+                IntColumn = 5,
+                DateTimeColumn = new DateTime(2025, 10, 25),
+                DateOnlyColumn = new DateOnly(2025, 10, 24),
+                TimeOnlyColumn = new TimeOnly(14, 12, 11),
+                DecimalColumn = 1.234m
+            },
+            new PropertyClass
+            {
+                StringColumn = "string2",
+                IntColumn = 5,
+                DateTimeColumn = new DateTime(2025, 10, 25),
+                DateOnlyColumn = new DateOnly(2025, 10, 24),
+                TimeOnlyColumn = new TimeOnly(14, 12, 11),
+                DecimalColumn = 1.234m
+            },
+        };
+
+        table.ShouldBeSubsetOf(collection);
+    }
 
     private class PropertyClass
     {
