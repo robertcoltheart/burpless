@@ -124,7 +124,7 @@ public class TableExtensionsTests
     }
 
     [Test]
-    public void TableAndCollectionAreEqual()
+    public async Task TableAndCollectionAreEqual()
     {
         var table = Table.Parse(
             """
@@ -145,6 +145,7 @@ public class TableExtensionsTests
             }
         };
 
+        await Assert.That(() => table.AreEqual(collection)).IsTrue();
         table.ShouldEqual(collection);
     }
 
@@ -170,11 +171,12 @@ public class TableExtensionsTests
             }
         };
 
+        await Assert.That(() => table.AreEqual(collection)).IsFalse();
         await Assert.That(() => table.ShouldEqual(collection)).Throws<TableValidationException>();
     }
 
     [Test]
-    public void TableShouldContainCollection()
+    public async Task TableShouldContainCollection()
     {
         var table = Table.Parse(
             """
@@ -196,6 +198,7 @@ public class TableExtensionsTests
             }
         };
 
+        await Assert.That(() => table.Contains(collection)).IsTrue();
         table.ShouldContain(collection);
     }
 
@@ -222,11 +225,12 @@ public class TableExtensionsTests
             }
         };
 
+        await Assert.That(() => table.Contains(collection)).IsFalse();
         await Assert.That(() => table.ShouldContain(collection)).Throws<TableValidationException>();
     }
 
     [Test]
-    public void TableShouldBeSubsetOfCollection()
+    public async Task TableShouldBeSubsetOfCollection()
     {
         var table = Table.Parse(
             """
@@ -256,6 +260,7 @@ public class TableExtensionsTests
             }
         };
 
+        await Assert.That(() => table.IsSubsetOf(collection)).IsTrue();
         table.ShouldBeSubsetOf(collection);
     }
 
@@ -281,6 +286,7 @@ public class TableExtensionsTests
             }
         };
 
+        await Assert.That(() => table.IsSubsetOf(collection)).IsFalse();
         await Assert.That(() => table.ShouldBeSubsetOf(collection)).Throws<TableValidationException>();
     }
 
