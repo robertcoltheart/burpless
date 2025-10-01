@@ -127,6 +127,29 @@ public class TableDataComparerTests
         await Assert.That(value).IsEqualTo("- | 1 | value |");
     }
 
+    [Test]
+    public async Task EmptyStringIsTreatedAsNull()
+    {
+        var table = Table
+            .WithColumns("IntValue", "StringValue", "BoolValue")
+            .AddRow("1", "", true);
+
+        var model = new ClassWithProperties
+        {
+            IntValue = 1,
+            StringValue = null!,
+            BoolValue = true
+        };
+
+        var comparer = new TableDataComparer<ClassWithProperties>();
+        var builder = new ComparisonBuilder();
+
+        var results = comparer.Compare(table, [model]).ToArray();
+
+        await Assert.That(results).HasCount(1);
+        await Assert.That(results[0].Type).IsEqualTo(ComparisonType.Match);
+    }
+
     private class ClassWithProperties
     {
         public int IntValue { get; set; }
