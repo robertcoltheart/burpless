@@ -79,7 +79,7 @@ internal class TableDataComparer<T> : IComparer<Table, T[]>
 
             var value = property.GetValue(item);
 
-            if (!objectComparer.Equal(value, rowValue))
+            if (!objectComparer.Equal(property.PropertyType, rowValue, value))
             {
                 return false;
             }
