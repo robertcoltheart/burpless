@@ -26,7 +26,8 @@ public class ComparisonBuilderTests
             """
               | col1 | col2 |
               | val1 | val2 |
-            """);
+            """,
+            IgnoreLineEndingStringComparer.Instance);
     }
 
     [Test]
@@ -45,7 +46,8 @@ public class ComparisonBuilderTests
               | val1 | val2 |
             - | val3 | val4 |
             + | val5 | val6 |
-            """);
+            """,
+            IgnoreLineEndingStringComparer.Instance);
     }
 
     [Test]
@@ -62,6 +64,7 @@ public class ComparisonBuilderTests
               | Missing properties |
             - | Prop1              |
             - | Prop2              |
-            """);
+            """,
+            IgnoreLineEndingStringComparer.Instance);
     }
 }

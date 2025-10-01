@@ -7,6 +7,8 @@ internal class TableDataComparer<T> : IComparer<Table, T[]>
     private readonly Dictionary<string, PropertyInfo> properties = typeof(T).GetProperties()
         .ToDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase);
 
+    private readonly ObjectComparer objectComparer = new();
+
     public IEnumerable<IComparison> Compare(Table table, T[] items)
     {
         if (table.Validator != null)
@@ -77,7 +79,7 @@ internal class TableDataComparer<T> : IComparer<Table, T[]>
 
             var value = property.GetValue(item);
 
-            if (!Equals(value, rowValue))
+            if (!objectComparer.Equal(property.PropertyType, rowValue, value))
             {
                 return false;
             }
