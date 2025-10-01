@@ -116,11 +116,13 @@ public class TableExtensionsTests
 
         var value = table.ToString();
 
-        await Assert.That(value).IsEqualTo(
+        var expected =
             """
               | String Column | Int Column | Date Time Column | Date Only Column | Time Only Column | Decimal Column |
               | string        | 5          | 2025-10-25       | 2025-10-24       | 14:12:11         | 1.234          |
-            """);
+            """;
+
+        await Assert.That(value).IsEqualTo(expected);
     }
 
     [Test]
