@@ -295,7 +295,7 @@ internal static class TypeParser
             }
             else
             {
-                yield return Activator.CreateInstance(valueType);
+                yield return valueType.GetDefaultValue();
             }
         }
     }

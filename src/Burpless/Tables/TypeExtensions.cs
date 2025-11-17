@@ -23,4 +23,14 @@ internal static class TypeExtensions
 
         return CollectionTypes.Contains(typeDefinition);
     }
+
+    public static object? GetDefaultValue(this Type type)
+    {
+        if (type.IsValueType)
+        {
+            return Activator.CreateInstance(type);
+        }
+
+        return null;
+    }
 }
