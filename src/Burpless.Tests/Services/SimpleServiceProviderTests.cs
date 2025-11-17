@@ -35,15 +35,15 @@ public class SimpleServiceProviderTests
     }
 
     [Test]
-    public void CannotResolveInterface()
+    public async Task CannotResolveInterfaceAsync()
     {
-        Assert.Throws(() => provider.GetService<IServiceProvider>());
+        await Assert.That(() => provider.GetService<IServiceProvider>()).ThrowsException();
     }
 
     [Test]
-    public void CannotResolveAbstract()
+    public async Task CannotResolveAbstractAsync()
     {
-        Assert.Throws(() => provider.GetService<Encoding>());
+        await Assert.That(() => provider.GetService<Encoding>()).ThrowsException();
     }
 
     private record Standalone;

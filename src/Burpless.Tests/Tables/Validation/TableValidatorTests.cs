@@ -1,4 +1,4 @@
-﻿using Burpless.Tables.Validation;
+using Burpless.Tables.Validation;
 
 namespace Burpless.Tests.Tables.Validation;
 
@@ -30,7 +30,7 @@ public class TableValidatorTests
     }
 
     [Test]
-    public void WrongTypeToValidateThrows()
+    public async Task WrongTypeToValidateThrowsAsync()
     {
         var validator = new TableValidator<Model>();
 
@@ -40,7 +40,7 @@ public class TableValidatorTests
 
         var model = new Dictionary<string, string>();
 
-        Assert.Throws(() => validator.IsValid("column", model, out _));
+        await Assert.That(() => validator.IsValid("column", model, out _)).ThrowsException();
     }
 
     [Test]

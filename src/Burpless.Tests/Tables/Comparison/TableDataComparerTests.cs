@@ -29,8 +29,8 @@ public class TableDataComparerTests
         var results = comparer.Compare(table, items).ToArray();
 
         await Assert.That(results).HasCount().EqualTo(2);
-        await Assert.That(results[0]).HasMember(x => x.Type).EqualTo(ComparisonType.Match);
-        await Assert.That(results[1]).HasMember(x => x.Type).EqualTo(ComparisonType.Match);
+        await Assert.That(results[0]).HasProperty(x => x.Type).IsEqualTo(ComparisonType.Match);
+        await Assert.That(results[1]).HasProperty(x => x.Type).IsEqualTo(ComparisonType.Match);
     }
 
     [Test]

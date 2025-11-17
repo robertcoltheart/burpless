@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+using System.Collections;
+using System.Collections.Concurrent;
 using System.Globalization;
 using System.Numerics;
 using System.Reflection;
@@ -37,17 +38,15 @@ internal static class TypeParser
         typeof(UInt128),
         typeof(BigInteger),
         typeof(Complex),
-        typeof(string)
+        typeof(string),
+        typeof(Uri)
     ];
+
+    private static readonly char[] Separators = [',', ';'];
 
     public static bool TryParse(Type type, string? value, out object parsed)
     {
         type = GetType(type);
-
-        if (ParseableTypes.Contains(type))
-        {
-            return TryParseExact(type, value, out parsed);
-        }
 
         if (BurplessSettings.Instance.CustomParsers.ContainsKey(type))
         {
@@ -55,6 +54,21 @@ internal static class TypeParser
             {
                 return true;
             }
+        }
+
+        if (ParseableTypes.Contains(type))
+        {
+            return TryParseExact(type, value, out parsed);
+        }
+
+        if (type.IsArray)
+        {
+            return TryParseArray(type, value, out parsed);
+        }
+
+        if (type.IsCollection())
+        {
+            return TryParseList(type, value, out parsed);
         }
 
         if (type.IsEnum)
@@ -147,6 +161,7 @@ internal static class TypeParser
             _ when type == typeof(BigInteger) => TryParse<BigInteger>(value, out parsed),
             _ when type == typeof(Complex) => TryParse<Complex>(value, out parsed),
             _ when type == typeof(string) => TryParse<string>(value, out parsed),
+            _ when type == typeof(Uri) => TryParseUri(value, out parsed),
             _ => throw new ArgumentException($"Cannot parse type {type}")
         };
     }
@@ -185,5 +200,103 @@ internal static class TypeParser
         parsed = null!;
 
         return false;
+    }
+
+    private static bool TryParseUri(string? value, out object parsed)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            parsed = null!;
+
+            return false;
+        }
+
+        try
+        {
+            parsed = new Uri(value);
+
+            return true;
+        }
+        catch 
+        {
+            parsed = null!;
+        }
+
+        return false;
+    }
+
+    private static bool TryParseArray(Type type, string? value, out object parsed)
+    {
+        var valueType = type.GetElementType();
+
+        if (valueType == null)
+        {
+            parsed = null!;
+
+            return false;
+        }
+
+        if (string.IsNullOrEmpty(value))
+        {
+            parsed = Enumerable.Empty<object>();
+
+            return true;
+        }
+
+        var values = value.Split(Separators);
+        var items = GetEnumerableItems(values, valueType);
+
+        var array = Array.CreateInstance(valueType, values.Length);
+        var index = 0;
+
+        foreach (var item in items)
+        {
+            array.SetValue(item, index++);
+        }
+
+        parsed = array;
+
+        return true;
+    }
+
+    private static bool TryParseList(Type type, string? value, out object parsed)
+    {
+        var valueType = type.GetGenericArguments().First();
+
+        if (string.IsNullOrEmpty(value))
+        {
+            parsed = Enumerable.Empty<object>();
+
+            return true;
+        }
+
+        var values = value.Split(Separators);
+        var items = GetEnumerableItems(values, valueType);
+
+        var list = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(valueType))!;
+
+        foreach (var item in items)
+        {
+            list.Add(Convert.ChangeType(item, valueType));
+        }
+
+        parsed = list;
+
+        return true;
+    }
+
+    private static IEnumerable GetEnumerableItems(string[] values, Type valueType)
+    {
+        foreach (var value in values)
+        {
+            if (TryParseExact(valueType, value.Trim(), out var parsedValue))
+            {
+                yield return parsedValue;
+            }
+            else
+            {
+                yield return Activator.CreateInstance(valueType);
+            }
+        }
     }
 }

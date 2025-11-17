@@ -1,4 +1,4 @@
-﻿using Burpless.Tables.Comparison;
+using Burpless.Tables.Comparison;
 using Burpless.Tables.Validation;
 
 namespace Burpless.Tests.Tables.Validation;
@@ -22,8 +22,8 @@ public class ValidatorComparerTests
 
         var results = comparer.Compare(table, [data]).ToArray();
 
-        await Assert.That(results).HasCount().EqualToOne();
-        await Assert.That(results.Where(x => x.Type == ComparisonType.Match)).HasCount().EqualToOne();
+        await Assert.That(results).HasCount(1);
+        await Assert.That(results.Where(x => x.Type == ComparisonType.Match)).HasCount(1);
     }
 
     [Test]
@@ -43,8 +43,8 @@ public class ValidatorComparerTests
 
         var results = comparer.Compare(table, [data]).ToArray();
 
-        await Assert.That(results).HasCount().EqualToOne();
-        await Assert.That(results.Where(x => x.Type == ComparisonType.Additional)).HasCount().EqualToOne();
+        await Assert.That(results).HasCount(1);
+        await Assert.That(results.Where(x => x.Type == ComparisonType.Additional)).HasCount(1);
     }
 
     private class Model
