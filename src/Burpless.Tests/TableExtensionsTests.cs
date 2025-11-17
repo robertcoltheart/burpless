@@ -1,4 +1,5 @@
-﻿using TUnit.Assertions.AssertConditions.Throws;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace Burpless.Tests;
 
@@ -58,14 +59,14 @@ public class TableExtensionsTests
     }
 
     [Test]
-    public void NoRowsWillThrowOnDeserialize()
+    public async Task NoRowsWillThrowOnDeserialize()
     {
         var table = Table.Parse(
             """
             | String Column | Int Column | DateTime Column | DateOnlyColumn | time only column | decimal-column |
             """);
 
-        Assert.Throws(() => table.Get<PropertyClass>());
+        await Assert.That(() => table.Get<PropertyClass>()).ThrowsException();
     }
 
     [Test]
@@ -291,6 +292,21 @@ public class TableExtensionsTests
         await Assert.That(() => table.ShouldBeSubsetOf(collection)).Throws<TableValidationException>();
     }
 
+    [Test]
+    public async Task CanCreateSetOfSeparatedValues()
+    {
+        var table = Table.Parse(
+            """
+            | string_values | int_list |
+            | 123,def       | 5, 6, 7  |
+            """);
+
+        var value = table.Get<CollectionsClass>();
+
+        await Assert.That(value.StringValues).IsNotNull().And.IsEquivalentTo(["123", "def"]);
+        await Assert.That(value.IntList).IsEquivalentTo([5, 6, 7]);
+    }
+
     private class PropertyClass
     {
         public string StringColumn { get; set; } = null!;
@@ -319,5 +335,12 @@ public class TableExtensionsTests
         public TimeOnly? TimeOnlyColumn { get; set; }
 
         public decimal? DecimalColumn { get; set; }
+    }
+
+    private class CollectionsClass
+    {
+        public string[]? StringValues { get; set; }
+
+        public List<int> IntList { get; set; } = [];
     }
 }

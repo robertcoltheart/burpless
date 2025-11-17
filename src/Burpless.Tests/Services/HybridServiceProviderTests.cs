@@ -1,4 +1,4 @@
-﻿using Burpless.Services;
+using Burpless.Services;
 
 namespace Burpless.Tests.Services;
 
@@ -16,12 +16,12 @@ public class HybridServiceProviderTests
     }
 
     [Test]
-    public void ResolutionOfDependenciesNotRegisteredFails()
+    public async Task ResolutionOfDependenciesNotRegisteredFails()
     {
         var services = new SpecificProvider(typeof(TimeProvider), TimeProvider.System);
         var provider = new HybridServiceProvider(services);
 
-        Assert.Throws(() => provider.GetService(typeof(ClassWithUnknownDependency)));
+        await Assert.That(() => provider.GetService(typeof(ClassWithUnknownDependency))).ThrowsException();
     }
 
     private record ClassWithDependency(TimeProvider Time);
