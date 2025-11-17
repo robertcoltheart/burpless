@@ -238,7 +238,7 @@ internal static class TypeParser
 
         if (string.IsNullOrEmpty(value))
         {
-            parsed = Enumerable.Empty<object>();
+            parsed = Array.CreateInstance(valueType, 0);
 
             return true;
         }
@@ -262,18 +262,17 @@ internal static class TypeParser
     private static bool TryParseList(Type type, string? value, out object parsed)
     {
         var valueType = type.GetGenericArguments().First();
+        var list = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(valueType))!;
 
         if (string.IsNullOrEmpty(value))
         {
-            parsed = Enumerable.Empty<object>();
+            parsed = list;
 
             return true;
         }
 
         var values = value.Split(Separators);
         var items = GetEnumerableItems(values, valueType);
-
-        var list = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(valueType))!;
 
         foreach (var item in items)
         {
