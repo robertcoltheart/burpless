@@ -20,7 +20,7 @@ public class TypePropertiesComparerTests
         var comparer = new TypePropertiesComparer<PropertiesClass>();
         var result = comparer.Compare(table, []);
 
-        await Assert.That(result).HasCount().EqualTo(differences);
+        await Assert.That(result).Count().IsEqualTo(differences);
     }
 
     private class PropertiesClass

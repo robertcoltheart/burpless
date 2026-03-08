@@ -28,7 +28,7 @@ public class TableDataComparerTests
         var comparer = new TableDataComparer<Model>();
         var results = comparer.Compare(table, items).ToArray();
 
-        await Assert.That(results).HasCount().EqualTo(2);
+        await Assert.That(results).Count().IsEqualTo(2);
         await Assert.That(results[0]).HasProperty(x => x.Type).IsEqualTo(ComparisonType.Match);
         await Assert.That(results[1]).HasProperty(x => x.Type).IsEqualTo(ComparisonType.Match);
     }
@@ -146,7 +146,7 @@ public class TableDataComparerTests
 
         var results = comparer.Compare(table, [model]).ToArray();
 
-        await Assert.That(results).HasCount(1);
+        await Assert.That(results).Count().IsEqualTo(1);
         await Assert.That(results[0].Type).IsEqualTo(ComparisonType.Match);
     }
 

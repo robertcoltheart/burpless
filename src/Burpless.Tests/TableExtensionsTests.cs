@@ -1,6 +1,3 @@
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-
 namespace Burpless.Tests;
 
 public class TableExtensionsTests
@@ -55,7 +52,7 @@ public class TableExtensionsTests
 
         var row = table.GetAll<PropertyClass>();
 
-        await Assert.That(row).HasCount().EqualTo(2);
+        await Assert.That(row).Count().IsEqualTo(2);
     }
 
     [Test]
