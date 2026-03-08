@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Example/">
+    <Project Path="src/Burpless.Example.WebApi.Tests/Burpless.Example.WebApi.Tests.csproj" />
+    <Project Path="src/Burpless.Example.WebApi/Burpless.Example.WebApi.csproj" />
+  </Folder>
+  <Project Path="src/Burpless.Tests/Burpless.Tests.csproj" />
+  <Project Path="src/Burpless/Burpless.csproj" />
+</Solution>

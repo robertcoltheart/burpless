@@ -43,7 +43,7 @@ public class TableTests
 
         await Assert.That(table.Columns).Contains("Column1")
             .And.Contains("Column 2");
-        await Assert.That(table.Rows).HasCount().EqualTo(1);
+        await Assert.That(table.Rows).Count().IsEqualTo(1);
         await Assert.That(table.Rows[0].Cast<string>()).Contains("value 1")
             .And.Contains("value 2");
     }
@@ -115,7 +115,7 @@ public class TableTests
 
         await Assert.That(table.Columns).Contains("Column1")
             .And.Contains("Column2");
-        await Assert.That(table.Rows).HasCount().EqualTo(1);
+        await Assert.That(table.Rows).Count().IsEqualTo(1);
         await Assert.That(table.Rows[0].Cast<string>()).Contains("value 1")
             .And.Contains("value 2");
     }
@@ -129,7 +129,7 @@ public class TableTests
 
         await Assert.That(table.Columns).Contains("Column1")
             .And.Contains("Column2");
-        await Assert.That(table.Rows).HasCount().EqualTo(1);
+        await Assert.That(table.Rows).Count().IsEqualTo(1);
         await Assert.That(table.Rows[0].Cast<string>()).Contains("value 1")
             .And.Contains("value 2");
     }
@@ -143,7 +143,7 @@ public class TableTests
 
         await Assert.That(table.Columns).Contains("Column1")
             .And.Contains("Column2");
-        await Assert.That(table.Rows).HasCount().EqualTo(1);
+        await Assert.That(table.Rows).Count().IsEqualTo(1);
         await Assert.That(table.Rows[0].Cast<string>()).Contains("123")
             .And.Contains("123.456");
     }
@@ -157,7 +157,7 @@ public class TableTests
 
         var items = table.ToArray();
 
-        await Assert.That(items).HasCount().EqualTo(2);
+        await Assert.That(items).Count().IsEqualTo(2);
         await Assert.That(items[0]).Contains($"Column1").And.Contains($"Column2");
         await Assert.That(items[1]).Contains($"123").And.Contains($"123.456");
     }

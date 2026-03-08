@@ -22,8 +22,8 @@ public class ValidatorComparerTests
 
         var results = comparer.Compare(table, [data]).ToArray();
 
-        await Assert.That(results).HasCount(1);
-        await Assert.That(results.Where(x => x.Type == ComparisonType.Match)).HasCount(1);
+        await Assert.That(results).Count().IsEqualTo(1);
+        await Assert.That(results.Where(x => x.Type == ComparisonType.Match)).Count().IsEqualTo(1);
     }
 
     [Test]
@@ -43,8 +43,8 @@ public class ValidatorComparerTests
 
         var results = comparer.Compare(table, [data]).ToArray();
 
-        await Assert.That(results).HasCount(1);
-        await Assert.That(results.Where(x => x.Type == ComparisonType.Additional)).HasCount(1);
+        await Assert.That(results).Count().IsEqualTo(1);
+        await Assert.That(results.Where(x => x.Type == ComparisonType.Additional)).Count().IsEqualTo(1);
     }
 
     private class Model
