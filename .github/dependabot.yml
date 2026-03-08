@@ -9,8 +9,3 @@ updates:
     directory: "/build"
     schedule:
       interval: "weekly"
-
-  - package-ecosystem: "nuget"
-    directory: "/.config"
-    schedule:
-      interval: "weekly"

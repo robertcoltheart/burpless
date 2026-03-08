@@ -1,11 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿#:package Bullseye@6.1.0
+#:package SimpleExec@13.0.0
+
 using static Bullseye.Targets;
 using static SimpleExec.Command;
 
-var version = await GetGitVersion();
+var version = new GitVersion();
 
 Target("clean", () =>
 {
@@ -54,24 +53,13 @@ Target("default", dependsOn: ["package"]);
 
 await RunTargetsAndExitAsync(args);
 
-async Task<GitVersion> GetGitVersion()
-{
-    Run("dotnet", "tool restore");
-
-    var (value, _) = await ReadAsync("dotnet", "dotnet-gitversion");
-
-    return JsonSerializer.Deserialize<GitVersion>(value);
-}
-
 public class GitVersion
 {
-    public string SemVer { get; set; }
+    public string SemVer { get; } = Environment.GetEnvironmentVariable("GitVersion_SemVer") ?? "0.1.0";
 
-    public string AssemblySemVer { get; set; }
+    public string AssemblySemVer { get; } = Environment.GetEnvironmentVariable("GitVersion_AssemblySemVer") ?? "0.1.0";
 
-    public string AssemblySemFileVer { get; set; }
+    public string AssemblySemFileVer { get; } = Environment.GetEnvironmentVariable("GitVersion_AssemblySemFileVer") ?? "0.1.0";
 
-    public string InformationalVersion { get; set; }
-
-    public string PreReleaseTag { get; set; }
+    public string InformationalVersion { get; } = Environment.GetEnvironmentVariable("GitVersion_InformationalVersion") ?? "0.1.0";
 }
