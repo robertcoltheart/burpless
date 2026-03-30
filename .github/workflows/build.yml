@@ -25,6 +25,11 @@ jobs:
         with:
             dotnet-version: |
               10.x
+      
+      - name: Env
+        run: |
+          echo "User: $(whoami)"
+          nbvg --version
 
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v4.3.3
