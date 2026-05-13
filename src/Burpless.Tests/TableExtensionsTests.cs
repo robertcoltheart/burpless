@@ -2,7 +2,6 @@ namespace Burpless.Tests;
 
 public class TableExtensionsTests
 {
-    [Test]
     public async Task CanDeserializeTable()
     {
         var table = Table.Parse(
@@ -198,6 +197,7 @@ public class TableExtensionsTests
         };
 
         await Assert.That(() => table.Contains(collection)).IsTrue();
+        await Assert.That(() => table.ShouldNotContain(collection)).Throws<TableValidationException>();
         table.ShouldContain(collection);
     }
 
@@ -226,6 +226,7 @@ public class TableExtensionsTests
 
         await Assert.That(() => table.Contains(collection)).IsFalse();
         await Assert.That(() => table.ShouldContain(collection)).Throws<TableValidationException>();
+        table.ShouldNotContain(collection);
     }
 
     [Test]
@@ -260,6 +261,7 @@ public class TableExtensionsTests
         };
 
         await Assert.That(() => table.IsSubsetOf(collection)).IsTrue();
+        await Assert.That(() => table.ShouldNotBeSubsetOf(collection)).Throws<TableValidationException>();
         table.ShouldBeSubsetOf(collection);
     }
 
@@ -287,6 +289,7 @@ public class TableExtensionsTests
 
         await Assert.That(() => table.IsSubsetOf(collection)).IsFalse();
         await Assert.That(() => table.ShouldBeSubsetOf(collection)).Throws<TableValidationException>();
+        table.ShouldNotBeSubsetOf(collection);
     }
 
     [Test]

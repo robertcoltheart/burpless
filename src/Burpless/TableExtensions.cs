@@ -66,6 +66,22 @@ public static class TableExtensions
     }
 
     /// <summary>
+    /// Determines whether a table is not equal to the provided collection of objects, and throws an exception if the collections are equal.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements of <paramref name="values"/>.</typeparam>
+    /// <param name="table">The <see cref="Table"/> that is used for comparison.</param>
+    /// <param name="values">The collection of values that is used for comparison.</param>
+    /// <exception cref="TableValidationException">The values are equal to the specified <see cref="Table"/>.</exception>
+    public static void ShouldNotEqual<T>(this Table table, IEnumerable<T>? values)
+    {
+        var differences = GetDifferences(table, values)
+            .ToArray();
+
+        VerifyColumns(typeof(T), differences);
+        VerifyRows(table, differences, [ComparisonType.Match]);
+    }
+
+    /// <summary>
     /// Determines whether a table contains the items in the provided collection of objects.
     /// </summary>
     /// <typeparam name="T">The type of the elements of <paramref name="values"/>.</typeparam>
@@ -96,6 +112,22 @@ public static class TableExtensions
     }
 
     /// <summary>
+    /// Determines whether a table does not contain the items in the provided collection of objects, and throws an exception if the table contains all the items in the collection.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements of <paramref name="values"/>.</typeparam>
+    /// <param name="table">The <see cref="Table"/> that is used for comparison.</param>
+    /// <param name="values">The collection of values that is used for comparison.</param>
+    /// <exception cref="TableValidationException">The <see cref="Table"/> contains the items in the collection specified.</exception>
+    public static void ShouldNotContain<T>(this Table table, IEnumerable<T> values)
+    {
+        var differences = GetDifferences(table, values)
+            .ToArray();
+
+        VerifyColumns(typeof(T), differences);
+        VerifyRows(table, differences, [ComparisonType.Match]);
+    }
+
+    /// <summary>
     /// Determines whether a table is contained within the provided collection of objects.
     /// </summary>
     /// <typeparam name="T">The type of the elements of <paramref name="values"/>.</typeparam>
@@ -123,6 +155,22 @@ public static class TableExtensions
 
         VerifyColumns(typeof(T), differences);
         VerifyRows(table, differences, [ComparisonType.Missing]);
+    }
+
+    /// <summary>
+    /// Determines whether a table is not contained within the provided collection of objects, and throws an exception if the collection contains any of the items in the table.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements of <paramref name="values"/>.</typeparam>
+    /// <param name="table">The <see cref="Table"/> that is used for comparison.</param>
+    /// <param name="values">The collection of values that is used for comparison.</param>
+    /// <exception cref="TableValidationException">The collection specified contains any of the items in the <see cref="Table"/>.</exception>
+    public static void ShouldNotBeSubsetOf<T>(this Table table, IEnumerable<T> values)
+    {
+        var differences = GetDifferences(table, values)
+            .ToArray();
+
+        VerifyColumns(typeof(T), differences);
+        VerifyRows(table, differences, [ComparisonType.Match]);
     }
 
     private static IEnumerable<IComparison> GetDifferences<T>(Table table, IEnumerable<T>? values)
