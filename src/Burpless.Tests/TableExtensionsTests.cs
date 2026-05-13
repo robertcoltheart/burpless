@@ -2,6 +2,7 @@ namespace Burpless.Tests;
 
 public class TableExtensionsTests
 {
+    [Test]
     public async Task CanDeserializeTable()
     {
         var table = Table.Parse(
